@@ -17,6 +17,6 @@ Imports:
 Suggests:
   knitr
 LinkingTo: Rcpp
-biocViews: RNAseq, DifferentialExression, GeneExpression, Biclustering, Transcription, ComplexDisease
+biocViews: DifferentialExpression, BiomedicalInformatics, Clustering, SystemsBiology, Transcriptomics, GeneExpression
 RoxygenNote: 6.0.1
 VignetteBuilder: knitr
