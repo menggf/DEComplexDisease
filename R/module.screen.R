@@ -79,9 +79,9 @@ module.screen<-function(res.module, feature.patients=NULL, feature.genes=NULL, s
 
 		names(pa.overlap)<-used.mods;
 		if(method=="ratio")
-			sort.mods = names(sort(pa.overlap, decreasing=T))
+			sort.mods = names(sort(pa.overlap, decreasing=TRUE))
 		else{
-			sort.mods = names(sort(pa.overlap, decreasing=F))
+			sort.mods = names(sort(pa.overlap, decreasing=FALSE))
 		}
 		show.n=min(show.n, length(sort.mods))
 		par(mfrow=trans.sq(show.n), mar=c(5, 4, 1, 2)+0.1);
