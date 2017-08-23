@@ -58,7 +58,7 @@ bi.deg<-function(exp, cl, method=c("edger","deseq2","normalized")[1], cutoff=0.0
 		deg.lst=mclapply(wh.pa, function(x){
 				z=DGEList(counts=exp[, c(wh.ct, x)]);
 				z2=equalizeLibSizes(z, dispersion=disp)$pseudo.counts;
-				p=pnbinom(z2[,n.ct+1], size=1/disp, mu=rowSums(z2[,1:n.ct])/n.ct, lower.tail = F)
+				p=pnbinom(z2[,n.ct+1], size=1/disp, mu=rowSums(z2[,1:n.ct])/n.ct, lower.tail = FALSE)
 				bi=sapply(1:length(p), function(w){
 						if(p[w] <= mycutoff[w] )
 							return(1)
@@ -74,7 +74,7 @@ bi.deg<-function(exp, cl, method=c("edger","deseq2","normalized")[1], cutoff=0.0
 	if(method=="deseq2"){
 		y=DESeqDataSetFromMatrix(countData =exp[, wh.ct], colData = data.frame(lab=rep("control",length(wh.ct))), design = ~ 1)
 		y <- estimateSizeFactors(y)
-		y <- estimateDispersions(y, quiet=T)
+		y <- estimateDispersions(y, quiet=TRUE)
 		disp=dispersions(y)
 		mycutoff=rep(cutoff, length(disp));
 		mycutoff[disp > quantile(disp, probs=0.97)]=cutoff+0.05
@@ -82,9 +82,9 @@ bi.deg<-function(exp, cl, method=c("edger","deseq2","normalized")[1], cutoff=0.0
 		deg.lst=mclapply(wh.pa, function(x){
 				y=DESeqDataSetFromMatrix(countData =exp[, c(wh.ct, x)], colData = data.frame(lab=c(rep("control",length(wh.ct)),"disease")), design = ~ 1)
 				y <- estimateSizeFactors(y);
-				y <- estimateDispersions(y, quiet=T)
+				y <- estimateDispersions(y, quiet=TRUE)
 				z2=2**assay(varianceStabilizingTransformation(y));
-				p=pnbinom(z2[,n.ct+1], size=1/disp, mu=rowSums(z2[,1:n.ct])/n.ct, lower.tail = F)
+				p=pnbinom(z2[,n.ct+1], size=1/disp, mu=rowSums(z2[,1:n.ct])/n.ct, lower.tail = FALSE)
 				bi=sapply(1:length(p), function(w){
 						if(p[w] <= mycutoff[w] )
 							return(1)

@@ -38,7 +38,7 @@ summarize.deg.specific<-function(res.deg, max.n=10, ...){
 	sim=sapply(pas, function(x)  res.deg[[x]]$sc)
 	cutoff=sapply(pas, function(x)  res.deg[[x]]$cutoff)
 	output=data.frame(sample.id=pas, up.regulation.raw=cc1[pas], down.regulation.raw=cc2[pas], neighbor.patients=deg.pa.len[pas],up.regulation.valdiated=dd1[pas], down.regulation.validated=dd2[pas], similarity=sim, cutoff=cutoff)
-	output=output[order(output$up.regulation.valdiated + output$down.regulation.validated, decreasing=TRUE),];
+	output=output[order(output$up.regulation.valdiated + output$down.regulation.validated, decreasing=T),];
 	return(output[1:min(max.n,length(pas)), ])
 }
 
