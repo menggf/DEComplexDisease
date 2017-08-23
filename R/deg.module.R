@@ -291,7 +291,7 @@ cluster.module<-function(res.module, vote.seed=FALSE, model.method=NULL, cores=1
 		for(cl in unique(grp)){
 			cl.pas=names(grp[grp==cl])
 			if(length(cl.pas) > 1){
-				wh.pa=names(sort(cts[cl, cl.pas],decreasing=T));
+				wh.pa=names(sort(cts[cl, cl.pas],decreasing=TRUE));
 			}else{
 				wh.pa=cl.pas
 			}
