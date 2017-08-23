@@ -1,4 +1,3 @@
-
 #include<iostream>
 #include<string>
 #include<fstream>
@@ -84,8 +83,8 @@ void merge(float *a, int *rank, int r,int m,int l)
 		k++;
 		j++;
 	}
-	delete b;
-	delete c;
+	delete[] b;
+	delete[] c;
 }
 void merge(int *a, int *rank, int r,int m,int l)
 {
@@ -123,8 +122,8 @@ void merge(int *a, int *rank, int r,int m,int l)
 		k++;
 		j++;
 	}
-	delete b;
-	delete c;
+	delete[] b;
+	delete[] c;
 }
 template <class T>
 void myorder(T *a,int *rank, int r,int l)
@@ -146,7 +145,7 @@ void myorder2(T *cc, int *od,int n){ // get the rank
     myorder(cc, temp, 0, n-1);
     for(i=0;i<n;i++)
     	od[temp[i]]=i;
-    delete temp;
+    delete[] temp;
 }
 
 float score(Rcpp::IntegerMatrix input,int *row, int *col,int num_row,int num_col){
