@@ -107,7 +107,7 @@ module.screen<-function(res.module, feature.patients=NULL, feature.genes=NULL, s
 		ge.overlap=sapply(used.mods, function(x) length(feature.genes[feature.genes%in%res.module[[x]][["max.genes"]][["genes"]]])/length(res.module[[x]][["max.genes"]][["genes"]]));
 		names(ge.overlap)<-used.mods;
 		ge.overlap=ge.overlap[ge.overlap > 0];
-		sort.mods = names(sort(ge.overlap, decreasing=T))
+		sort.mods = names(sort(ge.overlap, decreasing=TRUE))
 		show.n=min(show.n, length(sort.mods))
 		par(mfrow=trans.sq(show.n), mar=c(5, 4, 1, 2)+0.1)
 		for(mod in sort.mods[1:show.n]){
