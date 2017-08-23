@@ -282,7 +282,7 @@ Plot.deg.specific.test<-function(input, ann=NULL, col.order=NULL, show.genes=NUL
 		}
 
 		if(is.null(show.genes)){
-			aa=sort(apply(dmx2, 1, function(x) length(x[x!=0])),decreasing=T);
+			aa=sort(apply(dmx2, 1, function(x) length(x[x!=0])),decreasing=TRUE);
 			show.genes=names(aa[1:min(max.n, dim(dmx2)[1])]);
 			if(aa[length(show.genes)]==0)
 				show.genes=names(aa[aa!=0]);
