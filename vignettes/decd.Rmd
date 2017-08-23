@@ -28,7 +28,7 @@ Applying the DEComplexDisease analysis results, users are possible to find the p
 
 
 ## Package installation
-```{r, eval=FALSE}
+```
 source("https://bioconductor.org/biocLite.R")
 biocLite("DEComplexDisease")
 ```
@@ -38,7 +38,7 @@ DEComplexDisease needs huge computing powers to do the whole analysis for the re
 In `DEComplexDisease` package, we use `mclapply` tool of `parallel` package to do the multiple process computing. Users just need set "cores = n" in the `DEComplexDisease` functions to make use of multi-core hardware, where is "n" is the core number.
 
 Before the analysis, it is better start a new session or run 
-```{r, eval=FALSE}
+```
 rm(list=ls())
 ```
 to clear the current session. Otherwise, the whole session will be copy to each process, which may consume Huge ROM memory. Once the memory is ran out, `DEComplexDisease` may report wrong results or other problems.
@@ -52,7 +52,7 @@ In this manual, all the examples assume users to have a 4-core computer by setti
 
 In this manual, we use the RNA-seq counts data for 1217 breast cancer samples collected in TCGA project ("https://cancergenome.nih.gov/") as an example to illustrate the basic analysis steps of DEComplexDisease. The full dataset is available at https://sourceforge.net/projects/decd/:
 
-```{r,  eval=FALSE}
+```
 >download.file("https://superb-sea2.dl.sourceforge.net/project/decd/decd_data.rda",
               "decd_data.rda");
 >load("decd_data.rda")
@@ -72,10 +72,10 @@ TCGA.D8.A27K.01A TCGA.BH.A0HU.01A TCGA.BH.A5IZ.01A TCGA.AR.A5QM.01A
 
 The performance of DEComplexDisease is highly dependent on the quality of reference samples. Therefore, it is recommended to evaluate the quality of expression data for control samples. Based on `cl`, the control samples are collected and evaluated with hierarchical clustering.
 
-```{r, eval=FALSE}
+```
 hc=hclust(dist(t(exp.brca[, cl==0])))
 ```
-```{r, eval=FALSE}
+```
 plot(hc)
 rect.hclust(hc, k= 4, border = 'red')
 
@@ -83,7 +83,7 @@ rect.hclust(hc, k= 4, border = 'red')
 ![hierarchical clustering to normal samples](../inst/fig/fig1.hc.pdf)
 
 Based the hierarchical clustering results, the outliers are removed from reference building:
-```{r, eval=FALSE}
+```
 group=cutree(hc, k=4)
 exp=exp.brca[, !colnames(exp.brca) %in% names(group[ group != 2])]
 cl=cl.brca[ colnames(exp) ]
@@ -94,25 +94,25 @@ cl=cl.brca[ colnames(exp) ]
 
 DEComplexDisease applies `bi.deg` function to estimate the distribution parameters that describes the gene expression profiles of control samples. The normal samples are collected based on `cl`. `bi.deg` has three methods to estimate the reference expression profiles of control samples:  "edger", "deseq2" or "normalized". "edger" or "deseq2" is used for RNA-seq counts data by implementing the algorithms developed by [edgeR](http://bioconductor.org/packages/release/bioc/html/edgeR.html) or [DESeq2](http://www.bioconductor.org/packages/release/bioc/html/DESeq2.html). The dispersion (disp) and mean (mu) are estimated for each gene. The count number of $x_{i,j}$ is tested by
 
-```{r, eval=FALSE}
+```
 p=pnbinom(x, size=1/disp, mu=mu, lower.tail = F)
 ```
 
 "normalized" is used for normalized RNA-seq or microarray data. The mean (mu) and standard deviation (sd) is estimated for each gene. The z-score and p-value is calculated by
-```{r, eval=FALSE}
+```
   z=(x-mu)/sd
   p=pnorm(z,lower.tail=F)
 ```
 
 Using the p-value cutoff defined by the users, `bi.deg` assigns 1 or -1 to indicate the up- or down-regulated genes, where 1 is the up-regulated genes and -1 is the down-regulated genes. The other genes are assigned with 0. In this example,
 
-```{r, eval=FALSE}
+```
 deg=bi.deg(exp, cl, method="edger", cutoff=0.05, cores=4)
 ```
 
 `bi.deg` returns a `deg` object, which is a matrix of 1,0 and -1. Users can use Plot() to view the analysis results. 
 
-```{r, eval=FALSE, results='axis'}
+```
 Plot(deg, ann=ann.er, show.genes=c("ESR1","FOXA1","GATA3","FOXC1"))
 ```
 ![Plot for DEGs](../inst/fig/fig2.plot.deg.pdf)
@@ -125,13 +125,13 @@ The DEGs from `bi.deg` have noises, e.g. the DEGs not associated with disease, w
 
 `deg.specific` is used to find the cross-validated DEGs. Users only need to choose the proper minimum gene and minimum patient number by setting `min.genes` and `min.patients`. Please note that `min.patients` includes the seed patient itself.
 
-```{r, eval=FALSE}
+```
 res.deg=deg.specific(deg, min.genes=50, min.patients=5, cores=4)
 
 ```
 
 If users only want to see the results some selected patients, use `test.patients` to reduce the computation time. 
-```{r, eval=FALSE}
+```
 res.deg.test=deg.specific(deg, test.patients=brca1.mutated.patients, min.genes=50, 
                           min.patients=8, cores=4)
 
@@ -139,14 +139,14 @@ res.deg.test=deg.specific(deg, test.patients=brca1.mutated.patients, min.genes=5
 
 `deg.specific` returns a `deg.specific` object, which is a list comprising of the cross-validated DEGs and the support neighbors. If `test.patients` is set, a `deg.specific.test` object  is returned. Users can use Plot() to visualize the `deg.specific` and `deg.specific.test` object. In Figure 2,  we shows the validated DEGs in all used breast cancer patients. 
 
-```{r, eval=FALSE, results='asis'}
+```
 Plot(res.deg, ann=ann.er, show.genes=c("ESR1","FOXA1","GATA3","FOXC1"))
 ```
 ![Plot for cross-validated DEGs](../inst/fig/fig3.deg.pdf)
 
 For `res.deg.test`, it can also be plotted :
 
-```{r, eval=FALSE, results='asis'}
+```
 Plot(res.deg.test, ann=ann.er, show.genes=c("ESR1","FOXA1","GATA3","FOXC1"))
 ```
 ![Plot for cross-validated marker genes](../inst/fig/fig3.deg.test.pdf)
@@ -157,13 +157,13 @@ In this work, the DEG modules refer to the DEG list shared by many patients. DEG
 
 Like `deg.specific`, `seed.module` carries out a bi-clustering analysis to the output of `bi.deg` using each patient as a seed. The difference is that this function has more complex setting and steps to predict DEGs modules shared by many patients.
 
-```{r, eval=FALSE}
+```
 seed.mod1 = seed.module(deg, res.deg=res.specific, min.genes=100, min.patients=50, 
                         overlap=0.85, cores=4)
 ```
 or
 
-```{r, eval=FALSE}
+```
 seed.mod2 = seed.module(deg, test.patients=brca1.mutated.patients, min.genes=100, 
                         min.patients=20, overlap=0.85,  cores=4)
 ```
@@ -200,7 +200,7 @@ Other keys are patient IDs, which are the modules predicted with DEG seed of the
 * "patients.added", the ordered patients that are added to module during bi-clustering analysis
 
 The 'seed.module' object can visualized with Plot().
-```{r, eval=FALSE}
+```
 Plot(seed.mod1, ann=er.ann, type="model", max.n=5)
 ```
 
@@ -212,19 +212,19 @@ Plot(seed.mod1, ann=er.ann, type="model", max.n=5)
 
 For the big data, there are usually many patient samples and DEComplexDisease may predict too many patient-seeded modules. `cluster.module` is used to cluster the patient-seeded modules by a modified k-means based on their patient and gene signature similarity. The patients within the same cluster are ranked based on their connecting degrees so that to find the representative patient(s). if `vote.seed` is set as false, the bi-clustering analysis results of the representative patient will be used as the final results of the module. Otherwise, a generic seed will be generated by a voting method and the final results is predicted by bi-clustering analysis using the new seed. All the modules will marked as "M1", "M2", "M3"...
 
-```{r, eval=FALSE}
+```
 cluster.mod1 <-  seed.module(seed.mod1, cores=4)
 ```
 or 
 
-```{r, eval=FALSE}
+```
 cluster.mod2 <- seed.module(seed.mod1, vote.seed=T, cores=4)
 ```
 
 
 `cluster.module` returns a `cluster.module` object. 
 
-```{r, eval=FALSE}
+```
 >sort(names(cluster.mod1), decreasing=T)
   [1] "M99"             "M98"             "M97"             "M96"             "M95"            
   [6] "M94"             "M93"             "M92"             "M91"             "M90"            
@@ -279,14 +279,14 @@ Other keys has a prefix of "M", which indicates modules. Each module have severa
 
 The `deg.module` can be visualized by Plot(). 
 
-```{r, eval=FALSE}
+```
 Plot(cluster.module, ann=er.ann, type="model", max.n=5)
 ```
 ![Plot for clustered module](../inst/fig/fig4.module.pdf)
 
 In this examples, 5 modules are showed for their affiliation with the patients used in module discovery. It is possible to display these modules in independent samples by setting `deg` option. For examples,
 
-```{r, eval=FALSE}
+```
 brca1.module <- seed.module(deg[, brca1.mutated.patients], min.row=100, min.col=7,
                            cutoff=0.8, cores=4)
 Plot(brca1.module, ann=ann.er, max.n=5, type="model")
@@ -302,7 +302,7 @@ Plot(brca1.module, ann=ann.er, deg=deg, max.n=5, type="model")
 
 The DEG modules may have partial overlaps for either genes or patients. Use "module.overlap" to check the gene and patient overlap among modules.  This function is useful to check the relationship of modules and to choose the proper modules during the exploratory discovery steps.
 
-```{r, eval=FALSE}
+```
 module.overlap(cluster.mod1, max.n=5)
 ```
 ![Module overlaps: genes and patients](../inst/fig/fig5.pdf)
@@ -311,7 +311,7 @@ module.overlap(cluster.mod1, max.n=5)
 
 `module.compare` is used to compare the modules from different studies, e.g. the different diseases or the different data for the same disease. In following examples, we calculated the modules for both ER+ and ER- breast cancer patients. The modules are compared with `module.compare`.
 
-```{r, eval=FALSE}
+```
 res.mod1 <- seed.module(deg[,er.pos],  min.genes=100, min.patients=50,cutoff=0.85, cores=4)
 res.mod1 <- cluster.module(res.mod1)
 #modules of ER+ samples
@@ -319,7 +319,7 @@ res.mod2 <- seed.module(deg[,er.neg],  min.genes=100, min.patients=50,cutoff=0.8
 res.mod2 <- cluster.module(res.mod2)
 #modules of ER- samples
 ```
-```{r, eval=FALSE}
+```
 module.compare(res.mod1, res.mod2, max.n1=10, max.n2=10)
 ```
 ![Module comparison](../inst/fig/fig6.pdf)
@@ -329,7 +329,7 @@ Please note that, although this function is designed to do module comparison,  i
 ## The curve for gene-patient number in module discovery
 
 In the module discovery steps, a bi-clustering algorithm is applied to the binary DEG matrix. The DEGs of seed patients are gradually removed to a number of `min.genes`, which may result to a increased patient number from `min.patients`. In the output of `deg.module` tool, the track of gene-patient number change is recorded as `curve` for each module.
-```{r, eval=FALSE}
+```
 >names(cluster.mod1[["M1"]][["curve"]])
 [1] "no.gene"    "no.patient" "score"
 >head(cluster.mod1[["M1"]][["curve"]][["no.gene"]])
@@ -340,7 +340,7 @@ In the module discovery steps, a bi-clustering algorithm is applied to the binar
 
 `module.curve` can show the patient-gene numbers in a simple way.
 
-```{r, eval=FALSE}
+```
 module.curve(cluster.mod1, "M1")
 ```
 ![Patient-gene curve](../inst/fig/fig7.pdf)
@@ -360,7 +360,7 @@ In current version, `model.method` has four possible values: "slope.clustering",
 * `min.slope` is the point with minimum slope in gene-patient number curve;
 * `min.similarity` is based on the similarity scores and the point with minimum similarity scores is choosed.
 
-```{r, eval=FALSE}
+```
 x=c(100,300)
 names(x)<-c("M1","M3")
 new.cluster.mod1=module.modelling(cluster.mod1, keep.gene.num = x, method='slope.clustering',
@@ -374,7 +374,7 @@ module.curve(new.cluster.mod1, "M1")
 
 In complex diseases, many patients have the similar clinical trait or carry the same gene mutation. These feature patients are supposed to affected by the common mechanism. `model.screen` is used to find the modules that are potentially associated with the feature patients or genes. 
 
-```{r, eval=FALSE}
+```
 module.screen(cluster.mod1, feature.patients=brca1.mutated.patients)
 #search modules
 
@@ -388,7 +388,7 @@ module.screen(seed.mod1, feature.patients=brca1.mutated.patients,
 
 To understand the disease relevance of modules that predicted by modelling to bi-clustering process, we propose a functional annotation based method for exploratory validation. 
 
-```{r, eval=FALSE}
+```
 genes=cluster.mod1[["M1"]][["genes.removed"]]
 # split the genes into overlapped windows
 nas<-as.character(seq(1, length(genes)-400, by=50));
