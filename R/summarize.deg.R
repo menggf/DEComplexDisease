@@ -27,7 +27,7 @@ summarize.deg.specific<-function(res.deg, max.n=10, ...){
 	deg.gen.len=sapply(pas,function(x) length(res.deg[[x]]$genes));
 	deg.pa.len=sapply(pas,function(x) length(res.deg[[x]]$patients));
 
-	pas=names(sort(deg.gen.len, decreasing=T))
+	pas=names(sort(deg.gen.len, decreasing=TRUE))
 	dd1=sapply(pas, function(x) {
 								y=(res.deg[["decd.input"]]$deg)[res.deg[[x]]$genes, x];
 								length(y[y == 1])})
