@@ -19,6 +19,6 @@ Imports:
 Suggests:
   knitr
 LinkingTo: Rcpp
-biocViews: DNASeq, WholeGenome, FunctionalGenomics
+biocViews: DNASeq, WholeGenome, FunctionalGenomics, DifferntialExpression
 RoxygenNote: 6.0.1
 VignetteBuilder: knitr
