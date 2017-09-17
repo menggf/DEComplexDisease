@@ -17,6 +17,9 @@ Imports:
     grid,
     parallel,
     BiocParallel,
+    grDevices, 
+    graphics, 
+    stats
 Suggests:
   knitr
 LinkingTo: Rcpp
