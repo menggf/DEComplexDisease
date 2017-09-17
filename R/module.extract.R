@@ -22,41 +22,43 @@
 #'
 #' @examples
 #' # extract the genes and patients when 200 patients are observed in M1.
-#' page=module.extract(cluster.mod, "M1", n.patients=100)
+#' page=module.extract(cluster.mod, 'M1', n.patients=100)
 #' head(page$patients)
 #' head(page$geness)
 #' # find genes and patients in patient-seeded module
 #' module.extract(seed.mod, names(seed.mod)[1], n.patients=50)
 #' @export
 
-module.extract<-function(res.module, mod, n.patients=NULL, n.genes=NULL){
-	if(!is(res.module, "cluster.module") & !is(res.module, "seed.module") & !is(res.module, "list"))
-		stop("Error: res.module: must the output of 'seed.module' or 'cluster.module'!");
-  if(is.null(mod))
-    stop("Error: mod: should be specified!");
-  if(!mod %in% names(res.module))
-    stop("Error: mod: cannot be recognized!");
-  if(is.null(n.patients) & is.null(n.genes)){
-    return(list(genes=res.module[[mod]][["model"]][["genes"]], patients=res.module[[mod]][["model"]][["patients"]]));
-  }
-  n.pas=res.module[[mod]][["curve"]][["no.patient"]]
-  n.ges=res.module[[mod]][["curve"]][["no.gene"]]
-  if(!is.null(n.patients)){
-	    wh=which.min(abs(n.pas-n.patients));
-      n.patients=n.pas[wh];
-      n.genes=n.ges[wh];
-	}
-  if(!is.null(n.genes)){
-      wh=which.min(abs(n.ges-n.genes));
-      n.patients=n.pas[wh];
-      n.genes=n.ges[wh];
-  }
-  seed=res.module[[mod]][["seed"]];
-  seed.genes=names(seed[seed != 0]);
-  add.patients=res.module[[mod]][["patients.added"]];
-  remove.genes=res.module[[mod]][["genes.removed"]];
-  have.patients=add.patients[1:n.patients];
-  have.genes=seed.genes[!seed.genes%in%remove.genes[1: (length(seed.genes)-n.genes)]]
-  return(list(genes=have.genes, patients=have.patients));
+module.extract <- function(res.module, mod, n.patients = NULL, n.genes = NULL) {
+    if (!is(res.module, "cluster.module") & !is(res.module, "seed.module") & !is(res.module, 
+        "list")) 
+        stop("Error: res.module: must the output of 'seed.module' or 'cluster.module'!")
+    if (is.null(mod)) 
+        stop("Error: mod: should be specified!")
+    if (!mod %in% names(res.module)) 
+        stop("Error: mod: cannot be recognized!")
+    if (is.null(n.patients) & is.null(n.genes)) {
+        return(list(genes = res.module[[mod]][["model"]][["genes"]], patients = res.module[[mod]][["model"]][["patients"]]))
+    }
+    n.pas = res.module[[mod]][["curve"]][["no.patient"]]
+    n.ges = res.module[[mod]][["curve"]][["no.gene"]]
+    if (!is.null(n.patients)) {
+        wh = which.min(abs(n.pas - n.patients))
+        n.patients = n.pas[wh]
+        n.genes = n.ges[wh]
+    }
+    if (!is.null(n.genes)) {
+        wh = which.min(abs(n.ges - n.genes))
+        n.patients = n.pas[wh]
+        n.genes = n.ges[wh]
+    }
+    seed = res.module[[mod]][["seed"]]
+    seed.genes = names(seed[seed != 0])
+    add.patients = res.module[[mod]][["patients.added"]]
+    remove.genes = res.module[[mod]][["genes.removed"]]
+    have.patients = add.patients[1:n.patients]
+    have.genes = seed.genes[!seed.genes %in% remove.genes[1:(length(seed.genes) - 
+        n.genes)]]
+    return(list(genes = have.genes, patients = have.patients))
 }
 

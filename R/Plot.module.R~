@@ -313,7 +313,7 @@ Plot.cluster.module <- function(res.module, ann = NULL, deg = NULL, col.order = 
         sub.deg = deg[used.ges, ]
         # sims=apply(sub.deg, 2 , function(z) length(which( z ==
         # used.seed)))/length(used.seed);
-        sims = colSums(sub.deg == used.seed)/length(used.seed)
+        sims = colSums(sub.deg == new.seed)/length(used.seed)
         rr = rep("", length(pas))
         rr[sims >= overlap] = mylabs[1]
         if (!is.null(dissimilarity)) 

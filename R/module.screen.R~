@@ -48,7 +48,7 @@ module.screen <- function(res.module, feature.patients = NULL, feature.genes = N
     if (!is.null(feature.patients)) {
         if (length(feature.patients) < 3) 
             stop("Error: No enough 'feature.patients' is input!!")
-        pa.overlap = unlist(bplapply(used.mods, function(mod) {
+        pa.overlap = unlist(mclapply(used.mods, function(mod) {
             add.patients = res.module[[mod]][["patients.added"]]
             n.add.patients = length(add.patients)
             xx = length(add.patients[add.patients %in% feature.patients])

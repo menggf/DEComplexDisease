@@ -16,7 +16,7 @@ Imports:
     ComplexHeatmap,
     grid,
     parallel,
-    BiocParallel,
+    BiocParallel
 Suggests:
   knitr
 LinkingTo: Rcpp
