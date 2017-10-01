@@ -16,7 +16,7 @@ module.overlap(res.module, show.mods = NULL, type = c("model",
 
 \item{type}{the module type to display}
 
-\item{max.n}{the maximum number of modules to plot. If "show.mods" is set, this option will be ignored.}
+\item{max.n}{the maximum number of modules to plot. If 'show.mods' is set, this option will be ignored.}
 
 \item{show.overlap}{boolen, display the overlap number}
 
@@ -33,7 +33,7 @@ The DEG modules may have partial overlaps for either genes or patients. This fun
 }
 \examples{
 data(decd)
-module.overlap(seed.mod, max.n=5,type="model")
+module.overlap(seed.mod, max.n=5,type='model')
 }
 \author{
 Guofeng Meng

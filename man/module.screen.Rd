@@ -33,7 +33,7 @@ Screen feature patients or genes given by users among the predicted modules
 \details{
 This function is used to find the modules associated with the 'feature.patients' or 'feature genes'.
 
-In current version, two methods can be used: "ratio" and "fisher.test". `ratio` is to rank the modules based on ratio between observed overlaps and the expected overlaps that estimated using all the samples.  `fisher.test` is to use Fisher's exact test to check the significance of association.
+In current version, two methods can be used: 'ratio' and 'fisher.test'. `ratio` is to rank the modules based on ratio between observed overlaps and the expected overlaps that estimated using all the samples.  `fisher.test` is to use Fisher's exact test to check the significance of association.
 }
 \examples{
 # screen the modules for feature patients.

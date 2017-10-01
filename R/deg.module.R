@@ -16,7 +16,7 @@
 #'
 #' @author Guofeng Meng
 #'
-#' @import parallel
+#' @import BiocParallel
 #'
 #'
 #' @details The function is to find the DEGs lists shared by patients. Like \code{\link{deg.specific}}, it carries out the bi-clustering analysis to the output of \code{\link{bi.deg}}. The difference is that this function has more complex setting and steps to predict DEGs modules shared by patients.
@@ -74,22 +74,22 @@
 #' seed.mod2 <- seed.module(deg, model.method='min.similarity')
 #' @export
 
-seed.module <- function(deg, res.deg = NULL, test.patients = NULL, min.genes = 100, 
-    min.patients = 25, overlap = 0.85, model.method = c("slope.clustering", "max.square", 
+seed.module <- function(deg, res.deg = NULL, test.patients = NULL, min.genes = 100,
+    min.patients = 25, overlap = 0.85, model.method = c("slope.clustering", "max.square",
         "min.slope", "min.similarity")[1], cores = 1) {
-    if (!is(deg, "deg") & !is(deg, "matrix")) 
+    if (!is(deg, "deg") & !is(deg, "matrix"))
         stop("Error: deg: should be output of 'bi.deg' or binary matrix")
-    if (!is.null(res.deg) & is(res.deg, "deg.specific.test")) 
+    if (!is.null(res.deg) & is(res.deg, "deg.specific.test"))
         stop("Error: res.deg: should the 'deg.specific' for all the patients. Please set 'test.patients=NULL' and re-run it")
-    if (!is.null(res.deg) & !is(res.deg, "deg.specific")) 
+    if (!is.null(res.deg) & !is(res.deg, "deg.specific"))
         stop("Error: res.deg: should the 'deg.specific' for all the patients.")
-    if (min.patients <= 1) 
+    if (min.patients <= 1)
         stop("Error:min.patients: should greater than 1")
-    
-    if (model.method != "slope.clustering" & model.method != "max.square" & model.method != 
-        "min.slope" & model.method != "min.similarity") 
+
+    if (model.method != "slope.clustering" & model.method != "max.square" & model.method !=
+        "min.slope" & model.method != "min.similarity")
         stop("Error: model.method: not recognized!")
-    
+
     pas = colnames(deg)
     ges = row.names(deg)
     res = list()
@@ -101,14 +101,14 @@ seed.module <- function(deg, res.deg = NULL, test.patients = NULL, min.genes = 1
         min.genes = length(ges)
         warning("Warning: min.genes is bigger than the gene number")
     }
-    
-    input = list(overlap = overlap, deg = deg, test.patients = test.patients, min.genes = min.genes, 
+
+    input = list(overlap = overlap, deg = deg, test.patients = test.patients, min.genes = min.genes,
         min.patients = min.patients, model.method = model.method)
     cc = apply(deg, 1, function(x) length(x[x != 0]))/ncol(deg)
     cc.names = names(cc[cc > overlap - 0.1])
     seed0 <- .find.seed(deg, pas, 0.2)
     seed0[!names(seed0) %in% cc.names] = 0
-    rs0 = degSharedSigcpp("M0", seed0, deg[ges, pas], c(length(ges), length(pas), 
+    rs0 = degSharedSigcpp("M0", seed0, deg[ges, pas], c(length(ges), length(pas),
         5, max(round(length(pas) * 0.9), min.patients), overlap))
     res0 = list()
     if (length(rs0) < 5) {
@@ -120,14 +120,14 @@ seed.module <- function(deg, res.deg = NULL, test.patients = NULL, min.genes = 1
         res0[["seed"]] = seed0
         ges = ges[!ges %in% (res0[["max.patients"]][["genes"]])]
     }
-    
+
     if (min.patients >= length(pas) * 0.9) {
         # user want to find patterns shared by all patients
         res[["M0"]] <- res0
         res[["decd.input"]] <- input
         res[["decd.specific"]] <- NULL
         if (!is.null(res0)) {
-            out = module.modeling(res, cores = cores, model.method = model.method, 
+            out = module.modeling(res, cores = cores, model.method = model.method,
                 overlap = overlap)
         } else {
             print("No module is found!")
@@ -136,26 +136,26 @@ seed.module <- function(deg, res.deg = NULL, test.patients = NULL, min.genes = 1
         return(res)
     }
     used.pas = pas
-    if (!is.null(res.deg)) 
+    if (!is.null(res.deg))
         used.pas = used.pas[used.pas %in% names(res.deg)]
-    if (length(used.pas) == 0) 
+    if (length(used.pas) == 0)
         stop("Error: 'res.deg': no patient is recognized!")
     if (!is.null(test.patients)) {
         used.pas = used.pas[used.pas %in% test.patients]
-        if (length(used.pas) == 0) 
+        if (length(used.pas) == 0)
             stop("test.patients: no id is recoginzed")
     }
     res <- bplapply(used.pas, function(pp) {
         seed = deg[ges, pp]
         if (!is.null(res.deg)) {
-            if (is.null(res.deg[[pp]])) 
+            if (is.null(res.deg[[pp]]))
                 return(list())
             gs = res.deg[[pp]][["genes"]]
             seed[!ges %in% gs] = 0
         }
-        rs = degSharedSigcpp(paste("C", pp, sep = ""), seed, deg[ges, pas], c(length(ges), 
+        rs = degSharedSigcpp(paste("C", pp, sep = ""), seed, deg[ges, pas], c(length(ges),
             length(pas), min.genes, min.patients, overlap))
-        
+
         if (length(rs) < 5) {
             return(list())
         }
@@ -164,7 +164,7 @@ seed.module <- function(deg, res.deg = NULL, test.patients = NULL, min.genes = 1
         return(out)
     }, BPPARAM= MulticoreParam( workers= min(cores, length(used.pas))))
     names(res) <- used.pas
-    tag = sapply(used.pas, function(x) if (is.null(res[[x]][["max.genes"]])) 
+    tag = sapply(used.pas, function(x) if (is.null(res[[x]][["max.genes"]]))
         TRUE else FALSE)
     for (x in used.pas[tag]) res[[x]] = NULL
     res[["M0"]] <- res0
@@ -196,7 +196,7 @@ seed.module <- function(deg, res.deg = NULL, test.patients = NULL, min.genes = 1
 #'
 #' @author Guofeng Meng
 #'
-#' @import parallel
+#' @import BiocParallel
 #'
 #'
 #' @details The function is to cluster the modules predicted by \code{\link{seed.module}}, which is very useful when there are too many modules in 'res.module'.
@@ -229,18 +229,18 @@ seed.module <- function(deg, res.deg = NULL, test.patients = NULL, min.genes = 1
 #' cluster.mod2 <- cluster.module(seed.mod, model.method='slope.clustering', vote.seed=TRUE)
 #' @export
 
-cluster.module <- function(res.module, vote.seed = FALSE, model.method = NULL, cores = 1, 
+cluster.module <- function(res.module, vote.seed = FALSE, model.method = NULL, cores = 1,
     max.show.n = 1, seed = 1) {
-    if (!is(res.module, "seed.module")) 
+    if (!is(res.module, "seed.module"))
         stop("Error: res.module: should be output of 'seed.moduloe'")
     if (!is.null(model.method)) {
-        if (model.method != "slope.clustering" & model.method != "max.square" & model.method != 
-            "min.slope" & model.method != "min.similarity") 
+        if (model.method != "slope.clustering" & model.method != "max.square" & model.method !=
+            "min.slope" & model.method != "min.similarity")
             stop("Error: model.method: not recognized!")
     }
-    if (length(res.module) < 20) 
+    if (length(res.module) < 20)
         stop("res.module has too few seed module. It is not recommend to do clustering")
-    
+
     input = res.module[["decd.input"]]
     deg = input[["deg"]]
     pas = colnames(deg)
@@ -249,9 +249,9 @@ cluster.module <- function(res.module, vote.seed = FALSE, model.method = NULL, c
     min.patients = input[["min.patients"]]
     overlap = input[["overlap"]]
     test.patients = input[["test.patients"]]
-    if (is.null(model.method)) 
+    if (is.null(model.method))
         model.method = input[["model.method"]]
-    
+
     final.pas = names(res.module)
     final.pas = final.pas[final.pas %in% pas]
     res = res.module
@@ -265,7 +265,7 @@ cluster.module <- function(res.module, vote.seed = FALSE, model.method = NULL, c
             return(length(which(res.pas[[xx]] %in% res.pas[[yy]]))/length(res.pas[[xx]]))
         })
     }, BPPARAM= MulticoreParam( workers= min(cores, length(final.pas)))))
-    
+
     mm.pas = matrix(sim.pas, ncol = length(final.pas))
     row.names(mm.pas) <- final.pas
     colnames(mm.pas) <- final.pas
@@ -288,7 +288,7 @@ cluster.module <- function(res.module, vote.seed = FALSE, model.method = NULL, c
         }
         return(length(unique(has.pas)))
     }, BPPARAM= MulticoreParam( workers= min(cores, length(a)))))
-    
+
     fit = lm(b ~ a)
     tag = b/length(final.pas) > 0.5
     kk = a[tag][which.max((b[tag] - fit$coefficients[1])/a[tag])]
@@ -318,15 +318,15 @@ cluster.module <- function(res.module, vote.seed = FALSE, model.method = NULL, c
         outcome = bplapply(unique(grp), function(cl) {
             pp = names(grp[grp == cl])
             if (length(pp) == 1) {
-                if (is.null(res[[pp]])) 
+                if (is.null(res[[pp]]))
                   return(list())
                 return(res[[pp]])
             } else {
                 seed = .find.seed(deg[ges, pas], names(grp[grp == cl]), 0.2)
-                xx = degSharedSigcpp(paste("P", cl, sep = ""), seed, deg[ges, pas], 
+                xx = degSharedSigcpp(paste("P", cl, sep = ""), seed, deg[ges, pas],
                   c(dim(deg[ges, pas]), min.genes, min.patients, overlap))
-                
-                if (length(xx) < 5) 
+
+                if (length(xx) < 5)
                   return(list())
                 out = .read.output.module(xx, ges, pas)
                 out[["seed"]] = seed
@@ -335,7 +335,7 @@ cluster.module <- function(res.module, vote.seed = FALSE, model.method = NULL, c
         }, BPPARAM= MulticoreParam( workers= min(cores, length(unique(grp)))))
         names(outcome) <- paste("M", unique(grp), sep = "")
     }
-    outcome = module.modeling(outcome, cores = cores, model.method = model.method, 
+    outcome = module.modeling(outcome, cores = cores, model.method = model.method,
         para = input)
     outcome[["decd.clustering"]] <- list(group = grp, represent = represent)
     input[["vote.seed"]] = vote.seed

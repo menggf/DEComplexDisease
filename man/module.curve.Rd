@@ -22,7 +22,7 @@ Plot the curve of patient-gene number during bi-clustering analysis
 This function is used to display the patient and gene number during the bi-clustering analysis. It can be used for users to select the better gene or patient number for breakpoints.
 }
 \examples{
-module.curve(cluster.mod, "M1")
+module.curve(cluster.mod, 'M1')
 }
 \references{
 

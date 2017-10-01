@@ -20,9 +20,9 @@ module.compare(res.module1, res.module2, used.mods1 = NULL,
 
 \item{type}{the module type to display}
 
-\item{max.n1}{the maximum number of modules to display. If "used.mods1" is set, this option will be ignored.}
+\item{max.n1}{the maximum number of modules to display. If 'used.mods1' is set, this option will be ignored.}
 
-\item{max.n2}{the maximum number of modules to display. If "used.mods2" is set, this option will be ignored.}
+\item{max.n2}{the maximum number of modules to display. If 'used.mods2' is set, this option will be ignored.}
 
 \item{show.overlap}{boolean, display the overlap number}
 
@@ -39,7 +39,7 @@ This function is to compare the modules from different studies, e.g. the differe
 }
 \examples{
 \dontrun{
-module.compare(res.mod1,res.mod2, type="model", max.n=20)
+module.compare(res.mod1,res.mod2, type='model', max.n=20)
 }
 }
 \author{

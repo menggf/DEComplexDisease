@@ -14,13 +14,13 @@ module.modeling(res.module, keep.gene.num = NULL,
 
 \item{keep.gene.num}{a integer value or a vector (see details).}
 
-\item{model.method}{the modeling methods (see details). The possible values are "max.square", "slope.clustering", "min.slope" and "min.similarity"}
+\item{model.method}{the modeling methods (see details). The possible values are 'max.square', 'slope.clustering', 'min.slope' and 'min.similarity'}
 
 \item{cores}{the thread number}
 
 \item{overlap}{the minimum similarity for selected DEGs from two or more patients}
 
-\item{para}{a list, with two keys "deg" and "overlap". It should not be NULL if res.module is a list.}
+\item{para}{a list, with two keys 'deg' and 'overlap'. It should not be NULL if res.module is a list.}
 }
 \value{
 a 'deg.modules' object and its modules has a 'model' to be added or refined.
@@ -29,11 +29,11 @@ a 'deg.modules' object and its modules has a 'model' to be added or refined.
 This function attempts to find the breakpoint in patient-gene number curve generated during bi-clustering analysis, which may indicate inclusion/exclusion of molecular mechanism for selected patients
 }
 \details{
-This function will be automatic used by \code{\link{seed.module}} and \code{\link{cluster.module}}  during its module discovery steps. User can explicitly use it to refine the modelling results. After checking the 'curve' plot, users can change the break points to modify the modelling results by setting 'keep.gene.num', which is the number of DEGs to keep. If users only need to change part of the modules,  just give the the "keep.gene.num" for the selected modules.
+This function will be automatic used by \code{\link{seed.module}} and \code{\link{cluster.module}}  during its module discovery steps. User can explicitly use it to refine the modelling results. After checking the 'curve' plot, users can change the break points to modify the modelling results by setting 'keep.gene.num', which is the number of DEGs to keep. If users only need to change part of the modules,  just give the the 'keep.gene.num' for the selected modules.
 
 'keep.gene.num' can a integer value or a vector. If it is a integer number, all the modules will have the same 'keep.gene.num'. If it is a vector, its elements should use module name as their names. Otherwise, only the first element will be used and all the modules will be set. When 'keep.gene.num' is vector, it is not necessary to have the same length as modules. It is possible to only changes some of the modules. And the left modules will use the default setting.
 
-Another way to modify the modelling results is to change the 'model.method'. In this version, 'model.method' has four possible values: "slope.clustering", "max.square", "min.slope" and "min.similarity", which indicate the different four different modelling methods:
+Another way to modify the modelling results is to change the 'model.method'. In this version, 'model.method' has four possible values: 'slope.clustering', 'max.square', 'min.slope' and 'min.similarity', which indicate the different four different modelling methods:
  'slope.clustering' has maximum slope changes, which may indicate the inclusion/exclusion of molecular mechanism.
  'max.square' is the gene-patients number that has the maximum product;
  'min.slope' is the point with minimum slope in gene-patient number curve;
@@ -44,9 +44,9 @@ Within this package, users have two ways to refine the modeling results. One way
 }
 \examples{
    x=c(100,200)
-   names(x)<-c("M1","M3")
+   names(x)<-c('M1','M3')
    new.seed.mod=module.modeling(seed.mod, keep.gene.num = x)
-   #here, only "M1" and "M3" are modified
+   #here, only 'M1' and 'M3' are modified
    new.seed.mod=module.modeling(seed.mod, keep.gene.num = 100)
    # here, all the modules are modified
    new.cluster.mod=module.modeling(cluster.mod, model.method='min.similarity')

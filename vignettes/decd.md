@@ -2,7 +2,7 @@
 title: 'DEComplexDisease: A tool for differential expression analysis and exploratory investigation
   to complex diseases using big data'
 author: "Guofeng Meng"
-date: '`r Sys.Date()`'
+date: '2017-10-01'
 output:
   pdf_document:
     keep_tex: yes

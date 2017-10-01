@@ -13,7 +13,7 @@
 #'
 #' @author Guofeng Meng
 #'
-#' @import parallel
+#' @import BiocParallel
 #'
 #' @details The DEGs from \code{\link{bi.deg}} are mixed with noises, e.g. the DEGs not associated with disease. This is especially true when the differential expression analysis tests are done using one variable again references. The assumption behind his analysis is that the disease associated DEGs will be observed in other patients. This function implements a bi-clustering algorithm to find the DEGs shared by 'min.patients' in the binary DEG matrix. In this process, each patient is used as seed and its DEGs are gradually excluded to find if there is a DEG list which is observed in 'min.patients' when the similarity is greater is 'overlap'.
 #'
@@ -27,9 +27,9 @@
 #' deg.spc <- deg.specific(deg, min.genes=50, min.patients=5, overlap=0.85)
 #' @export
 
-deg.specific <- function(deg, test.patients = NULL, min.genes = 50, min.patients = 5, 
+deg.specific <- function(deg, test.patients = NULL, min.genes = 50, min.patients = 5,
     overlap = 0.85, cores = 1) {
-    if (!is(deg, "deg") & !is(deg, "matrix")) 
+    if (!is(deg, "deg") & !is(deg, "matrix"))
         stop("Error: deg: should be output of `bi.deg`")
     pas = colnames(deg)
     ges = row.names(deg)
@@ -41,26 +41,26 @@ deg.specific <- function(deg, test.patients = NULL, min.genes = 50, min.patients
             test.all = TRUE
         } else {
             used.pas = used.pas[used.pas %in% test.patients]
-            if (length(used.pas) == 0) 
+            if (length(used.pas) == 0)
                 stop("Error: test.patients: No patient ID is recognized")
         }
     }
     bb = apply(deg, 2, function(x) length(x[x != 0]))
     used.pas = names(sort(bb[used.pas]))
     res = bplapply(used.pas, function(pp) {
-        x = degSpecificSigcpp(paste("C_", pp, sep = ""), deg[ges, pp], deg[ges, pas], 
+        x = degSpecificSigcpp(paste("C_", pp, sep = ""), deg[ges, pp], deg[ges, pas],
             c(dim(deg[ges, pas]), min.genes, min.patients, overlap))
-        if (length(x) < 5) 
+        if (length(x) < 5)
             return(list(genes = vector(), patients = vector(), sc = 0, overlap = overlap))
         return(.read.output.deg(x, ges, pas))
     }, BPPARAM= MulticoreParam( workers= min(cores, length(used.pas))))
-    
+
     names(res) <- used.pas
-    tag = sapply(used.pas, function(x) if (length(res[[x]][["genes"]]) < min.genes | 
-        length(res[[x]][["patients"]]) < min.patients | res[[x]][["sc"]] < overlap) 
+    tag = sapply(used.pas, function(x) if (length(res[[x]][["genes"]]) < min.genes |
+        length(res[[x]][["patients"]]) < min.patients | res[[x]][["sc"]] < overlap)
         TRUE else FALSE)
     for (pa in used.pas[tag]) res[[pa]] = NULL
-    res[["decd.input"]] = list(genes = ges, patients = used.pas, overlap = overlap, 
+    res[["decd.input"]] = list(genes = ges, patients = used.pas, overlap = overlap,
         deg = deg, min.genes = min.genes, min.patients = min.patients, overlap = overlap)
     if (!is.null(test.patients) & !test.all) {
         res[["decd.test"]] = test.patients

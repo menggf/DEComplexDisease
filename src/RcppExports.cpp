@@ -7,7 +7,7 @@ using namespace Rcpp;
 
 // degSpecificSigcpp
 Rcpp::NumericVector degSpecificSigcpp(Rcpp::String x, Rcpp::IntegerVector seed, Rcpp::IntegerMatrix deg, Rcpp::NumericVector par);
-RcppExport SEXP DEComplexDisease_degSpecificSigcpp(SEXP xSEXP, SEXP seedSEXP, SEXP degSEXP, SEXP parSEXP) {
+RcppExport SEXP _DEComplexDisease_degSpecificSigcpp(SEXP xSEXP, SEXP seedSEXP, SEXP degSEXP, SEXP parSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -21,7 +21,7 @@ END_RCPP
 }
 // degSharedSigcpp
 Rcpp::NumericVector degSharedSigcpp(Rcpp::String x, Rcpp::IntegerVector seed, Rcpp::IntegerMatrix deg, Rcpp::NumericVector par);
-RcppExport SEXP DEComplexDisease_degSharedSigcpp(SEXP xSEXP, SEXP seedSEXP, SEXP degSEXP, SEXP parSEXP) {
+RcppExport SEXP _DEComplexDisease_degSharedSigcpp(SEXP xSEXP, SEXP seedSEXP, SEXP degSEXP, SEXP parSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -35,8 +35,8 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"DEComplexDisease_degSpecificSigcpp", (DL_FUNC) &DEComplexDisease_degSpecificSigcpp, 4},
-    {"DEComplexDisease_degSharedSigcpp", (DL_FUNC) &DEComplexDisease_degSharedSigcpp, 4},
+    {"_DEComplexDisease_degSpecificSigcpp", (DL_FUNC) &_DEComplexDisease_degSpecificSigcpp, 4},
+    {"_DEComplexDisease_degSharedSigcpp", (DL_FUNC) &_DEComplexDisease_degSharedSigcpp, 4},
     {NULL, NULL, 0}
 };
 

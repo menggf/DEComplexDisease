@@ -30,7 +30,7 @@ Users can set `n.patients` or `n.genes` to define the break points of bi-cluster
 }
 \examples{
 # extract the genes and patients when 200 patients are observed in M1.
-page=module.extract(cluster.mod, "M1", n.patients=100)
+page=module.extract(cluster.mod, 'M1', n.patients=100)
 head(page$patients)
 head(page$geness)
 # find genes and patients in patient-seeded module

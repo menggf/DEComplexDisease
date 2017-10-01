@@ -13,7 +13,7 @@ cluster.module(res.module, vote.seed = FALSE, model.method = NULL,
 
 \item{vote.seed}{boolean, generate a generic seed or not}
 
-\item{model.method}{the method to find the breakpoint of bi-clustering. It is accepted value including 'slope.clustering', 'max.square', 'min.slope', 'min.similarity'. If it is NULL, its value will be get from res.module[["decd.input"]][["module.method"]]}
+\item{model.method}{the method to find the breakpoint of bi-clustering. It is accepted value including 'slope.clustering', 'max.square', 'min.slope', 'min.similarity'. If it is NULL, its value will be get from res.module[['decd.input']][['module.method']]}
 
 \item{cores}{the thread number}
 
@@ -23,25 +23,25 @@ cluster.module(res.module, vote.seed = FALSE, model.method = NULL,
 }
 \value{
 A cluster.module object.
-It has two keys with prefix of "decd":
+It has two keys with prefix of 'decd':
 
-"decd.input", the input information, including binary DEG matrix,  used.genes and other parameter setting.
+'decd.input', the input information, including binary DEG matrix,  used.genes and other parameter setting.
 
-"decd.clustering",  the clustering and the representative patient information.
+'decd.clustering',  the clustering and the representative patient information.
 
-Other keys has a prefix of "M", which indicates clustered modules. Each module have several keys:
+Other keys has a prefix of 'M', which indicates clustered modules. Each module have several keys:
 
-"curve", the patient-gene number during bi-clustering analysis;
+'curve', the patient-gene number during bi-clustering analysis;
 
-"max.genes", the patient and genes when 'min.patients' is observed in bi-clustering analysis;
+'max.genes', the patient and genes when 'min.patients' is observed in bi-clustering analysis;
 
-"max.patients", the patient and genes when 'min.genes' is reached in bi-clustering analysis";
+'max.patients', the patient and genes when 'min.genes' is reached in bi-clustering analysis';
 
-"model", the patient and genes at the breakpoint of the `curve`;
+'model', the patient and genes at the breakpoint of the `curve`;
 
-"genes.removed", the ordered genes that are removed from module during bi-clustering analysis;
+'genes.removed', the ordered genes that are removed from module during bi-clustering analysis;
 
-"patients.added", the ordered patients that are added to module during bi-clustering analysis
+'patients.added', the ordered patients that are added to module during bi-clustering analysis
 }
 \description{
 This function uses the output of \code{\link{bi.deg}} as input to predict the patient-DEG lists (or modules) shared by patients.

@@ -12,6 +12,8 @@
 #' @author Guofeng Meng
 #'
 #' @importFrom edgeR calcNormFactors estimateDisp getDispersion equalizeLibSizes DGEList
+#' @importFrom utils tail
+#' @importFrom methods is
 #' @importFrom DESeq2 DESeqDataSetFromMatrix estimateSizeFactors estimateDispersions dispersions varianceStabilizingTransformation
 #' @import parallel
 #'
@@ -26,25 +28,25 @@
 #' deg <- bi.deg(exp,cl=cl, method='edger', cutoff=0.05) # exp is the RNA-seq counts matrix
 #' @export
 
-bi.deg <- function(exp, cl, method = c("edger", "deseq2", "normalized")[1], cutoff = 0.05, 
+bi.deg <- function(exp, cl, method = c("edger", "deseq2", "normalized")[1], cutoff = 0.05,
     cores = 1) {
-    if (!is(exp, "matrix") & !is(exp, "data.frame")) 
+    if (!is(exp, "matrix") & !is(exp, "data.frame"))
         stop("Error: exp: should be matrix or data.frame")
     exp = as.matrix(exp)
-    if (method != "edger" & method != "deseq2" & method != "normalized") 
+    if (method != "edger" & method != "deseq2" & method != "normalized")
         stop("Error:method: must be edger, deseq2 or normalized data. method is not recognized")
-    if (dim(exp)[2] != length(cl)) 
+    if (dim(exp)[2] != length(cl))
         stop("Error:cl: has the wrong numbers!")
     wh.ct = which(cl == 0)
-    if (length(wh.ct) == 0) 
+    if (length(wh.ct) == 0)
         stop("Error: No control sample is found or control samples are not set as 0!")
-    if (length(wh.ct) <= 2) 
+    if (length(wh.ct) <= 2)
         stop("Error: No enough control sample is used!")
-    if (length(wh.ct) < 10) 
-        print(paste("Warning: only ", length(wh.ct), " control samples are used!", 
+    if (length(wh.ct) < 10)
+        print(paste("Warning: only ", length(wh.ct), " control samples are used!",
             sep = ""))
     wh.pa = which(cl == 1)
-    if (length(wh.pa) == 0) 
+    if (length(wh.pa) == 0)
         stop("Error: No disease/treated sample is found or samples are not set as 1!")
     genes = row.names(exp)
     pas = colnames(exp[, wh.pa])
@@ -60,7 +62,7 @@ bi.deg <- function(exp, cl, method = c("edger", "deseq2", "normalized")[1], cuto
         deg.lst = bplapply(wh.pa, function(x) {
             z = DGEList(counts = exp[, c(wh.ct, x)])
             z2 = equalizeLibSizes(z, dispersion = disp)$pseudo.counts
-            p = pnbinom(z2[, n.ct + 1], size = 1/disp, mu = rowSums(z2[, 1:n.ct])/n.ct, 
+            p = pnbinom(z2[, n.ct + 1], size = 1/disp, mu = rowSums(z2[, 1:n.ct])/n.ct,
                 lower.tail = FALSE)
             bi = integer(length(p))
             bi[p <= mycutoff] = 1
@@ -71,7 +73,7 @@ bi.deg <- function(exp, cl, method = c("edger", "deseq2", "normalized")[1], cuto
         deg = as.matrix(as.data.frame(deg.lst))
     }
     if (method == "deseq2") {
-        y = DESeqDataSetFromMatrix(countData = exp[, wh.ct], colData = data.frame(lab = rep("control", 
+        y = DESeqDataSetFromMatrix(countData = exp[, wh.ct], colData = data.frame(lab = rep("control",
             length(wh.ct))), design = ~1)
         y <- estimateSizeFactors(y)
         y <- estimateDispersions(y, quiet = TRUE)
@@ -80,12 +82,12 @@ bi.deg <- function(exp, cl, method = c("edger", "deseq2", "normalized")[1], cuto
         mycutoff[disp > quantile(disp, probs = 0.97)] = cutoff + 0.05
         rm(y)
         deg.lst = bplapply(wh.pa, function(x) {
-            y = DESeqDataSetFromMatrix(countData = exp[, c(wh.ct, x)], colData = data.frame(lab = c(rep("control", 
+            y = DESeqDataSetFromMatrix(countData = exp[, c(wh.ct, x)], colData = data.frame(lab = c(rep("control",
                 length(wh.ct)), "disease")), design = ~1)
             y <- estimateSizeFactors(y)
             y <- estimateDispersions(y, quiet = TRUE)
             z2 = 2^assay(varianceStabilizingTransformation(y))
-            p = pnbinom(z2[, n.ct + 1], size = 1/disp, mu = rowSums(z2[, 1:n.ct])/n.ct, 
+            p = pnbinom(z2[, n.ct + 1], size = 1/disp, mu = rowSums(z2[, 1:n.ct])/n.ct,
                 lower.tail = FALSE)
             bi = integer(length(p))
             bi[p <= mycutoff] = 1

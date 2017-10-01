@@ -15,7 +15,7 @@
 
 \item{ann}{a data.frame for the patient annotation}
 
-\item{deg}{a "deg" to display. It is returned by \code{\link{bi.deg}}}
+\item{deg}{a 'deg' to display. It is returned by \code{\link{bi.deg}}}
 
 \item{col.order}{the order of column in heatmap}
 

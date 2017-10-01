@@ -4,6 +4,8 @@
 #'
 #' @import ComplexHeatmap
 #' @import grid
+#' @importFrom grDevices rainbow
+#' @importFrom graphics abline axis legend lines mtext par plot points points text
 #' @param input a 'deg' object returned by \code{\link{bi.deg}}
 #' @param ann a data.frame for the patient annotation
 #' @param col.order the order of column in heatmap
@@ -26,25 +28,25 @@
 #'
 #' @export
 
-Plot.deg <- function(input, ann = NULL, col.order = NULL, show.genes = NULL, max.n = 30, 
+Plot.deg <- function(input, ann = NULL, col.order = NULL, show.genes = NULL, max.n = 30,
     up.col = "red", down.col = "blue", ...) {
-    if (!is.null(ann) & !is(ann, "data.frame")) 
+    if (!is.null(ann) & !is(ann, "data.frame"))
         stop("Error: ann: should be data.frame!")
     input = as.matrix(input)
     ges = row.names(input)
     pas = colnames(input)
-    if (!all(unique(as.vector(input)) %in% c(1, -1, 0))) 
+    if (!all(unique(as.vector(input)) %in% c(1, -1, 0)))
         stop("Error: deg: valid values are  1, -1 and 0")
     if (is.null(show.genes)) {
         aa = sort(apply(input, 1, function(x) length(x[x != 0])), decreasing = TRUE)
         show.genes = names(aa[1:min(max.n, dim(input)[1])])
-        if (aa[length(show.genes)] == 0) 
+        if (aa[length(show.genes)] == 0)
             show.genes = names(aa[aa != 0])
     } else {
         all.ids = row.names(input)
         show.genes = show.genes[show.genes %in% all.ids]
     }
-    if (length(show.genes) == 0) 
+    if (length(show.genes) == 0)
         stop("Error: show.genes: cannot recognize the ids")
     mat.deg = t(sapply(show.genes, function(x) {
         y = input[x, ]
@@ -53,17 +55,17 @@ Plot.deg <- function(input, ann = NULL, col.order = NULL, show.genes = NULL, max
         rr[y == -1] = "Down"
         return(rr)
     }))
-    
-    
+
+
     row.names(mat.deg) <- show.genes
     colnames(mat.deg) <- colnames(input)
-    
+
     ha = NULL
     if (!is.null(ann)) {
         has.pas = row.names(ann)
-        if (length(which(has.pas %in% pas)) < 0.6 * length(pas)) 
+        if (length(which(has.pas %in% pas)) < 0.6 * length(pas))
             warnings("Warning: ann: Too few patients has annotation")
-        if (length(which(has.pas %in% pas)) < 0.3 * length(pas)) 
+        if (length(which(has.pas %in% pas)) < 0.3 * length(pas))
             stop("Error: ann: Too few patients has annotation")
         all.ann = unique(as.vector(as.matrix(ann)))
         all.ann = all.ann[!is.na(all.ann)]
@@ -78,36 +80,36 @@ Plot.deg <- function(input, ann = NULL, col.order = NULL, show.genes = NULL, max
         } else {
             new.ann = ann[pas, ]
         }
-        ha = HeatmapAnnotation(df = new.ann, annotation_height = 0.2, name = names(ann), 
+        ha = HeatmapAnnotation(df = new.ann, annotation_height = 0.2, name = names(ann),
             col = col.list)
     }
     alter_fun = list(background = function(x, y, w, h) {
-        grid.rect(x, y, w - unit(0.5, "mm"), h - unit(0.5, "mm"), gp = gpar(fill = "grey", 
+        grid.rect(x, y, w - unit(0.5, "mm"), h - unit(0.5, "mm"), gp = gpar(fill = "grey",
             col = NA))
     }, Up = function(x, y, w, h) {
         grid.rect(x, y, w - unit(0.5, "mm"), h * 0.33, gp = gpar(fill = up.col, col = NA))
     }, Down = function(x, y, w, h) {
-        grid.rect(x, y, w - unit(0.5, "mm"), h * 0.33, gp = gpar(fill = down.col, 
+        grid.rect(x, y, w - unit(0.5, "mm"), h * 0.33, gp = gpar(fill = down.col,
             col = NA))
     })
     col = c(Up = up.col, Down = down.col)
     if (!is.null(ha)) {
         if (is.null(col.order)) {
-            oncoPrint(mat.deg, get_type = function(x) strsplit(x, ";")[[1]], bottom_annotation = ha, 
+            oncoPrint(mat.deg, get_type = function(x) strsplit(x, ";")[[1]], bottom_annotation = ha,
                 alter_fun = alter_fun, col = col, column_title = "", heatmap_legend_param = list(title = "DEG"))
         } else {
-            oncoPrint(mat.deg, get_type = function(x) strsplit(x, ";")[[1]], column_order = col.order, 
-                bottom_annotation = ha, alter_fun = alter_fun, col = col, column_title = "", 
+            oncoPrint(mat.deg, get_type = function(x) strsplit(x, ";")[[1]], column_order = col.order,
+                bottom_annotation = ha, alter_fun = alter_fun, col = col, column_title = "",
                 heatmap_legend_param = list(title = "DEG"))
         }
     } else {
         if (is.null(col.order)) {
-            oncoPrint(mat.deg, get_type = function(x) strsplit(x, ";")[[1]], alter_fun = alter_fun, 
-                col = col, column_title = "", heatmap_legend_param = list(title = "DEG"), 
+            oncoPrint(mat.deg, get_type = function(x) strsplit(x, ";")[[1]], alter_fun = alter_fun,
+                col = col, column_title = "", heatmap_legend_param = list(title = "DEG"),
                 ...)
         } else {
-            oncoPrint(mat.deg, get_type = function(x) strsplit(x, ";")[[1]], column_order = col.order, 
-                alter_fun = alter_fun, col = col, column_title = "", heatmap_legend_param = list(title = "DEG"), 
+            oncoPrint(mat.deg, get_type = function(x) strsplit(x, ";")[[1]], column_order = col.order,
+                alter_fun = alter_fun, col = col, column_title = "", heatmap_legend_param = list(title = "DEG"),
                 ...)
         }
     }
@@ -146,9 +148,9 @@ Plot <- function(...) {
 #'
 #' @export
 
-Plot.deg.specific <- function(input, ann = NULL, col.order = NULL, show.genes = NULL, 
+Plot.deg.specific <- function(input, ann = NULL, col.order = NULL, show.genes = NULL,
     max.n = 30, up.col = "red", down.col = "blue", ...) {
-    if (!is.null(ann) & !is(ann, "data.frame")) 
+    if (!is.null(ann) & !is(ann, "data.frame"))
         stop("Error: ann: should be data.frame!")
     ges = input[["decd.input"]][["genes"]]
     pas = input[["decd.input"]][["patients"]]
@@ -164,15 +166,15 @@ Plot.deg.specific <- function(input, ann = NULL, col.order = NULL, show.genes = 
         wh = which(ges %in% temp)
         dmx2[wh, pa] = dmx[wh, pa]
     }
-    
+
     if (is.null(show.genes)) {
         aa = sort(apply(dmx2, 1, function(x) length(x[x != 0])), decreasing = TRUE)
         show.genes = names(aa[1:min(max.n, dim(dmx2)[1])])
-        if (aa[length(show.genes)] == 0) 
+        if (aa[length(show.genes)] == 0)
             show.genes = names(aa[aa != 0])
     } else {
         show.genes = show.genes[show.genes %in% ges]
-        if (length(show.genes) == 0) 
+        if (length(show.genes) == 0)
             stop("Error: show.genes: cannot recognize the ids")
     }
     mat.deg = t(sapply(show.genes, function(x) {
@@ -187,9 +189,9 @@ Plot.deg.specific <- function(input, ann = NULL, col.order = NULL, show.genes = 
     ha = NULL
     if (!is.null(ann)) {
         has.pas = row.names(ann)
-        if (length(which(has.pas %in% pas)) < 0.6 * length(pas)) 
+        if (length(which(has.pas %in% pas)) < 0.6 * length(pas))
             warnings("Warning: ann: Too few patients has annotation")
-        if (length(which(has.pas %in% pas)) < 0.3 * length(pas)) 
+        if (length(which(has.pas %in% pas)) < 0.3 * length(pas))
             stop("Error: ann: Too few patients has annotation")
         all.ann = unique(as.vector(as.matrix(ann)))
         all.ann = all.ann[!is.na(all.ann)]
@@ -197,7 +199,7 @@ Plot.deg.specific <- function(input, ann = NULL, col.order = NULL, show.genes = 
         names(cl) <- all.ann
         col.list = lapply(names(ann), function(x) return(cl))
         names(col.list) <- names(ann)
-        
+
         if (dim(ann)[2] == 1) {
             new.ann = as.data.frame(ann[pas, ])
             row.names(new.ann) <- pas
@@ -205,37 +207,37 @@ Plot.deg.specific <- function(input, ann = NULL, col.order = NULL, show.genes = 
         } else {
             new.ann = ann[pas, ]
         }
-        ha = HeatmapAnnotation(df = new.ann, annotation_height = 0.2, name = names(ann), 
+        ha = HeatmapAnnotation(df = new.ann, annotation_height = 0.2, name = names(ann),
             col = col.list)
     }
     alter_fun = list(background = function(x, y, w, h) {
-        grid.rect(x, y, w - unit(0.5, "mm"), h - unit(0.5, "mm"), gp = gpar(fill = "grey", 
+        grid.rect(x, y, w - unit(0.5, "mm"), h - unit(0.5, "mm"), gp = gpar(fill = "grey",
             col = NA))
     }, Up = function(x, y, w, h) {
         grid.rect(x, y, w - unit(0.5, "mm"), h * 0.33, gp = gpar(fill = up.col, col = NA))
     }, Down = function(x, y, w, h) {
-        grid.rect(x, y, w - unit(0.5, "mm"), h * 0.33, gp = gpar(fill = down.col, 
+        grid.rect(x, y, w - unit(0.5, "mm"), h * 0.33, gp = gpar(fill = down.col,
             col = NA))
     })
     col = c(Up = up.col, Down = down.col)
     if (!is.null(ha)) {
         if (is.null(col.order)) {
-            oncoPrint(mat.deg, get_type = function(x) strsplit(x, ";")[[1]], bottom_annotation = ha, 
-                alter_fun = alter_fun, col = col, column_title = "", heatmap_legend_param = list(title = "DEG"), 
+            oncoPrint(mat.deg, get_type = function(x) strsplit(x, ";")[[1]], bottom_annotation = ha,
+                alter_fun = alter_fun, col = col, column_title = "", heatmap_legend_param = list(title = "DEG"),
                 ...)
         } else {
-            oncoPrint(mat.deg, get_type = function(x) strsplit(x, ";")[[1]], column_order = col.order, 
-                bottom_annotation = ha, alter_fun = alter_fun, col = col, column_title = "", 
+            oncoPrint(mat.deg, get_type = function(x) strsplit(x, ";")[[1]], column_order = col.order,
+                bottom_annotation = ha, alter_fun = alter_fun, col = col, column_title = "",
                 heatmap_legend_param = list(title = "DEG"), ...)
         }
     } else {
         if (is.null(col.order)) {
-            oncoPrint(mat.deg, get_type = function(x) strsplit(x, ";")[[1]], alter_fun = alter_fun, 
-                col = col, column_title = "", heatmap_legend_param = list(title = "DEG"), 
+            oncoPrint(mat.deg, get_type = function(x) strsplit(x, ";")[[1]], alter_fun = alter_fun,
+                col = col, column_title = "", heatmap_legend_param = list(title = "DEG"),
                 ...)
         } else {
-            oncoPrint(mat.deg, get_type = function(x) strsplit(x, ";")[[1]], column_order = col.order, 
-                alter_fun = alter_fun, col = col, column_title = "", heatmap_legend_param = list(title = "DEG"), 
+            oncoPrint(mat.deg, get_type = function(x) strsplit(x, ";")[[1]], column_order = col.order,
+                alter_fun = alter_fun, col = col, column_title = "", heatmap_legend_param = list(title = "DEG"),
                 ...)
         }
     }
@@ -271,9 +273,9 @@ Plot.deg.specific <- function(input, ann = NULL, col.order = NULL, show.genes = 
 #'
 #' @export
 #'
-Plot.deg.specific.test <- function(input, ann = NULL, col.order = NULL, show.genes = NULL, 
+Plot.deg.specific.test <- function(input, ann = NULL, col.order = NULL, show.genes = NULL,
     max.n = 30, up.col = "red", down.col = "blue", ...) {
-    if (!is.null(ann) & !is(ann, "data.frame")) 
+    if (!is.null(ann) & !is(ann, "data.frame"))
         stop("Error: ann: should be data.frame!")
     ges = input[["decd.input"]][["genes"]]
     pas = input[["decd.input"]][["patients"]]
@@ -289,15 +291,15 @@ Plot.deg.specific.test <- function(input, ann = NULL, col.order = NULL, show.gen
         wh = which(ges %in% temp)
         dmx2[wh, pa] = dmx[wh, pa]
     }
-    
+
     if (is.null(show.genes)) {
         aa = sort(apply(dmx2, 1, function(x) length(x[x != 0])), decreasing = TRUE)
         show.genes = names(aa[1:min(max.n, dim(dmx2)[1])])
-        if (aa[length(show.genes)] == 0) 
+        if (aa[length(show.genes)] == 0)
             show.genes = names(aa[aa != 0])
     } else {
         show.genes = show.genes[show.genes %in% ges]
-        if (length(show.genes) == 0) 
+        if (length(show.genes) == 0)
             stop("Error: show.genes: cannot recognize the gene IDs")
     }
     mat.deg = t(sapply(show.genes, function(x) {
@@ -312,9 +314,9 @@ Plot.deg.specific.test <- function(input, ann = NULL, col.order = NULL, show.gen
     ha = NULL
     if (!is.null(ann)) {
         has.pas = row.names(ann)
-        if (length(which(has.pas %in% pas)) < 0.6 * length(pas)) 
+        if (length(which(has.pas %in% pas)) < 0.6 * length(pas))
             warnings("Warning: ann: Too few patients has annotation")
-        if (length(which(has.pas %in% pas)) < 0.3 * length(pas)) 
+        if (length(which(has.pas %in% pas)) < 0.3 * length(pas))
             stop("Error: ann: Too few patients has annotation")
         all.ann = unique(as.vector(as.matrix(ann)))
         all.ann = all.ann[!is.na(all.ann)]
@@ -324,7 +326,7 @@ Plot.deg.specific.test <- function(input, ann = NULL, col.order = NULL, show.gen
             return(cl)
         })
         names(col.list) <- names(ann)
-        
+
         if (dim(ann)[2] == 1) {
             new.ann = as.data.frame(ann[pas, ])
             row.names(new.ann) <- pas
@@ -332,37 +334,37 @@ Plot.deg.specific.test <- function(input, ann = NULL, col.order = NULL, show.gen
         } else {
             new.ann = ann[pas, ]
         }
-        ha = HeatmapAnnotation(df = new.ann, annotation_height = 0.2, name = names(ann), 
+        ha = HeatmapAnnotation(df = new.ann, annotation_height = 0.2, name = names(ann),
             col = col.list)
     }
     alter_fun = list(background = function(x, y, w, h) {
-        grid.rect(x, y, w - unit(0.5, "mm"), h - unit(0.5, "mm"), gp = gpar(fill = "grey", 
+        grid.rect(x, y, w - unit(0.5, "mm"), h - unit(0.5, "mm"), gp = gpar(fill = "grey",
             col = NA))
     }, Up = function(x, y, w, h) {
         grid.rect(x, y, w - unit(0.5, "mm"), h * 0.33, gp = gpar(fill = up.col, col = NA))
     }, Down = function(x, y, w, h) {
-        grid.rect(x, y, w - unit(0.5, "mm"), h * 0.33, gp = gpar(fill = down.col, 
+        grid.rect(x, y, w - unit(0.5, "mm"), h * 0.33, gp = gpar(fill = down.col,
             col = NA))
     })
     col = c(Up = up.col, Down = down.col)
     if (!is.null(ha)) {
         if (is.null(col.order)) {
-            oncoPrint(mat.deg, get_type = function(x) strsplit(x, ";")[[1]], bottom_annotation = ha, 
-                alter_fun = alter_fun, col = col, column_title = "", heatmap_legend_param = list(title = "DEG"), 
+            oncoPrint(mat.deg, get_type = function(x) strsplit(x, ";")[[1]], bottom_annotation = ha,
+                alter_fun = alter_fun, col = col, column_title = "", heatmap_legend_param = list(title = "DEG"),
                 ...)
         } else {
-            oncoPrint(mat.deg, get_type = function(x) strsplit(x, ";")[[1]], column_order = col.order, 
-                bottom_annotation = ha, alter_fun = alter_fun, col = col, column_title = "", 
+            oncoPrint(mat.deg, get_type = function(x) strsplit(x, ";")[[1]], column_order = col.order,
+                bottom_annotation = ha, alter_fun = alter_fun, col = col, column_title = "",
                 heatmap_legend_param = list(title = "DEG"), ...)
         }
     } else {
         if (is.null(col.order)) {
-            oncoPrint(mat.deg, get_type = function(x) strsplit(x, ";")[[1]], alter_fun = alter_fun, 
-                col = col, column_title = "", heatmap_legend_param = list(title = "DEG"), 
+            oncoPrint(mat.deg, get_type = function(x) strsplit(x, ";")[[1]], alter_fun = alter_fun,
+                col = col, column_title = "", heatmap_legend_param = list(title = "DEG"),
                 ...)
         } else {
-            oncoPrint(mat.deg, get_type = function(x) strsplit(x, ";")[[1]], column_order = col.order, 
-                alter_fun = alter_fun, col = col, column_title = "", heatmap_legend_param = list(title = "DEG"), 
+            oncoPrint(mat.deg, get_type = function(x) strsplit(x, ";")[[1]], column_order = col.order,
+                alter_fun = alter_fun, col = col, column_title = "", heatmap_legend_param = list(title = "DEG"),
                 ...)
         }
     }

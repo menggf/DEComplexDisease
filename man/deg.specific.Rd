@@ -22,7 +22,7 @@ deg.specific(deg, test.patients = NULL, min.genes = 50, min.patients = 5,
 \item{cores}{the thread number}
 }
 \value{
-A 'deg.specific' or 'deg.specific.test' object. It has a key of "decd.input", which stores the binary DEG matrix, genes, patients and used parameter setting. Other keys are the patients IDs and they store the cross-validated DEGs.
+A 'deg.specific' or 'deg.specific.test' object. It has a key of 'decd.input', which stores the binary DEG matrix, genes, patients and used parameter setting. Other keys are the patients IDs and they store the cross-validated DEGs.
 }
 \description{
 This function is use the output of \code{\link{bi.deg}} as input to predict the differentially expressed genes (DEGs) for each patient by cross-validation of multiple patients.

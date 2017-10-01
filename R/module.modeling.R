@@ -4,6 +4,7 @@
 #'
 #' @docType methods
 #' @import ComplexHeatmap
+#' @importFrom stats fisher.test kmeans lm loess pnbinom pnorm predict quantile sd
 #'
 #' @name module.modeling
 #' @param res.module  a 'seed.module' or 'cluster.module' object
@@ -43,33 +44,33 @@
 #' @export
 
 
-module.modeling <- function(res.module, keep.gene.num = NULL, model.method = c("slope.clustering", 
+module.modeling <- function(res.module, keep.gene.num = NULL, model.method = c("slope.clustering",
     "max.square", "min.slope", "min.similarity")[1], cores = 1, overlap = NULL, para = NULL) {
-    if (model.method != "slope.clustering" & model.method != "max.square" & model.method != 
-        "min.slope" & model.method != "min.similarity") 
+    if (model.method != "slope.clustering" & model.method != "max.square" & model.method !=
+        "min.slope" & model.method != "min.similarity")
         stop("Error: model.method: not recognized!")
     mods = names(res.module)
     mods = mods[mods != "decd.specific" & mods != "decd.input" & mods != "decd.clustering"]
     if (!is.null(res.module[["decd.input"]])) {
         deg = res.module[["decd.input"]][["deg"]]
-        if (is.null(overlap)) 
+        if (is.null(overlap))
             overlap = res.module[["decd.input"]][["overlap"]]
         min.genes = res.module[["decd.input"]][["min.genes"]]
     } else {
         deg = para[["deg"]]
-        if (is.null(overlap)) 
+        if (is.null(overlap))
             overlap = para[["overlap"]]
         min.genes = para[["min.genes"]]
     }
     mdl = bplapply(mods, function(mod) {
         keep = -1
-        if (!is.null(keep.gene.num) & is.null(names(keep.gene.num))) 
+        if (!is.null(keep.gene.num) & is.null(names(keep.gene.num)))
             keep = keep.gene.num[1]
         if (keep == -1 & !is.null(keep.gene.num)) {
-            if (!is.na(keep.gene.num[mod])) 
+            if (!is.na(keep.gene.num[mod]))
                 keep = keep.gene.num[mod]
         }
-        if (keep != -1) 
+        if (keep != -1)
             model.method = "manual"
         sc <- res.module[[mod]][["curve"]][["score"]]
         x <- res.module[[mod]][["curve"]][["no.gene"]]
@@ -90,7 +91,7 @@ module.modeling <- function(res.module, keep.gene.num = NULL, model.method = c("
                   wh = which.max(z)
                   keep = x[wh]
                 }
-                if (model.method == "max.square") 
+                if (model.method == "max.square")
                   keep = x[which.max(x * y)]
                 if (model.method == "max.slope") {
                   fit = lm(x ~ poly(y, 10, raw = TRUE))
@@ -107,7 +108,7 @@ module.modeling <- function(res.module, keep.gene.num = NULL, model.method = c("
                 }
             }
         }
-        if (keep < min.genes) 
+        if (keep < min.genes)
             keep = min.genes
         seed = res.module[[mod]][["seed"]]
         n = length(seed[seed != 0])

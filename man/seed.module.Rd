@@ -28,27 +28,27 @@ seed.module(deg, res.deg = NULL, test.patients = NULL, min.genes = 100,
 }
 \value{
 A seed.module object.
-It has one key with prefix of "decd":
+It has one key with prefix of 'decd':
 
-"decd.input", the input information, including binary DEG matrix,  test.patients and other parameter setting.
+'decd.input', the input information, including binary DEG matrix,  test.patients and other parameter setting.
 
-It may have one key of "M0":
+It may have one key of 'M0':
 
-"M0", a modules shared by all the patients. In many cases, M0 is NULL when M0 is not predicted.
+'M0', a modules shared by all the patients. In many cases, M0 is NULL when M0 is not predicted.
 
 Other keys are patient IDs, which are the modules predicted with DEG seed of the patient. Each one have several keys:
 
-"curve", the patient-gene number during bi-clustering analysis;
+'curve', the patient-gene number during bi-clustering analysis;
 
-"max.genes", the patient and genes when 'min.patients' is observed in bi-clustering analysis;
+'max.genes', the patient and genes when 'min.patients' is observed in bi-clustering analysis;
 
-"max.patients", the patient and genes when 'min.genes' is reached in bi-clustering analysis";
+'max.patients', the patient and genes when 'min.genes' is reached in bi-clustering analysis';
 
-"model", the patient and genes at the breakpoint of the `curve`;
+'model', the patient and genes at the breakpoint of the `curve`;
 
-"genes.removed", the ordered genes that are removed from module during bi-clustering analysis;
+'genes.removed', the ordered genes that are removed from module during bi-clustering analysis;
 
-"patients.added", the ordered patients that are added to module during bi-clustering analysis
+'patients.added', the ordered patients that are added to module during bi-clustering analysis
 }
 \description{
 This function uses the output of \code{\link{bi.deg}} as input to predict the patient-DEG lists (or modules) shared by patients.
@@ -68,9 +68,9 @@ During the bi-clustering analysis, 'deg.module' will record the bi-clustering re
 
   'model' stores the gene/patient information when the gene-patients number 'curve' fits the criteria of 'model.method'.
 
-The detailed information of the bi-clustering analysis results for all used patients is stored in "decd.specific" of output list.
+The detailed information of the bi-clustering analysis results for all used patients is stored in 'decd.specific' of output list.
 
-In this version, 'model.method' has four possible values: "slope.clustering", "max.square", "min.slope" and "min.similarity", which indicate the different four different modelling methods:
+In this version, 'model.method' has four possible values: 'slope.clustering', 'max.square', 'min.slope' and 'min.similarity', which indicate the different four different modelling methods:
 
  'slope.clustering' has maximum slope changes, which may indicate the inclusion/exclusion of molecular mechanism;
 
