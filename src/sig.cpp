@@ -527,7 +527,7 @@ vector <float> job_specific(string st, Rcpp::IntegerMatrix input, int *seed, int
         	y++;
 
     if(output1 >= overlap && x >=min_row && y >=min_col){
-    	Rcpp::Rcout<<"DEG: "<< st <<":"<< num_w << "\t" << x << "\t" << y << "\t" << overlap << "\t" << output1 <<endl;
+    	//Rcpp::Rcout<<"DEG: "<< st <<":"<< num_w << "\t" << x << "\t" << y << "\t" << overlap << "\t" << output1 <<endl;
     	res.push_back(x);
     	res.push_back(y);
     	res.push_back(overlap);
@@ -568,7 +568,7 @@ vector <float> job_shared(string st, Rcpp::IntegerMatrix input, int *seed, int n
 		tt=tt+x3+1;
 		y3=res[tt];
 		tt=tt+y3+1;
-		Rcpp::Rcout<<"Module "<<st<<": "<< num_w <<": max.gene: "<<x1<<"/"<<y1<<"; max.patient: "<<x3<<"/"<<y3<<";"<<overlap<<":"<<sc<<endl;
+		//Rcpp::Rcout<<"Module "<<st<<": "<< num_w <<": max.gene: "<<x1<<"/"<<y1<<"; max.patient: "<<x3<<"/"<<y3<<";"<<overlap<<":"<<sc<<endl;
 	}
 	return res;
 }
