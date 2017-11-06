@@ -17,7 +17,7 @@
 #' @author Guofeng Meng
 #'
 #' @import BiocParallel
-#'
+#' @import Rcpp
 #'
 #' @details The function is to find the DEGs lists shared by patients. Like \code{\link{deg.specific}}, it carries out the bi-clustering analysis to the output of \code{\link{bi.deg}}. The difference is that this function has more complex setting and steps to predict DEGs modules shared by patients.
 #'

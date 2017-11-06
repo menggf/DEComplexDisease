@@ -555,10 +555,10 @@ vector <float> job_shared(string st, Rcpp::IntegerMatrix input, int *seed, int n
 
 
 	float x1=0, x3=0, y1=0, y3=0;
-	float sc=0;
+	//float sc=0;
 	if(res.size() > 5 ){
 		int tt=0;
-		sc=res[tt];
+		//sc=res[tt];
 		tt=tt+1;
 		x1=res[tt];
 		tt=tt+x1+1;
