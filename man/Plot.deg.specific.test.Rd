@@ -34,10 +34,10 @@ Plot the cross-validated DEGs predicted by \code{\link{deg.specific}}.
 This function applied the function of oncoPrint from `ComplexHeatmap` to dispaly ownership of the DEGs. The output is a heatmap plots where the genes with maximum observations are showed.
 }
 \examples{
-\dontrun{
+
 Plot(deg,ann.er, max.n=5)
 Plot(deg.spc, ann.er, max.n=5)
-}
+
 
 }
 \references{

@@ -23,9 +23,9 @@ Summarize the DEG modules
 This function summarize the DEG modules
 }
 \examples{
-\dontrun{
+
 report.module <- summarize(cluster.mod)
-}
+
 }
 \references{
 

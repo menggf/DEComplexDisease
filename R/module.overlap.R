@@ -23,7 +23,7 @@
 #' @return The heatmap plot for gene and patient overlaps.
 #'
 #' @examples
-#' data(decd)
+#' data(seed.mod)
 #' module.overlap(seed.mod, max.n=5,type='model')
 #' @export
 

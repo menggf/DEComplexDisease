@@ -98,7 +98,7 @@ The DEGs from `bi.deg` have noises, e.g. the DEGs not associated with disease, w
 `deg.specific` is used to find the cross-validated DEGs. Users only need to choose the proper minimum gene and minimum patient number by setting `min.genes` and `min.patients`. Please note that `min.patients` includes the seed patient itself.
 
 ```{r}
-res.deg=deg.specific(deg, min.genes=50, min.patients=5, cores=4)
+res.deg=deg.specific(deg, min.genes=30, min.patients=5, cores=4)
 
 ```
 

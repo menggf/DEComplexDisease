@@ -14,7 +14,6 @@
 #' @author Guofeng Meng
 #'
 #' @import BiocParallel
-#' @import Rcpp
 #'
 #' @details The DEGs from \code{\link{bi.deg}} are mixed with noises, e.g. the DEGs not associated with disease. This is especially true when the differential expression analysis tests are done using one variable again references. The assumption behind his analysis is that the disease associated DEGs will be observed in other patients. This function implements a bi-clustering algorithm to find the DEGs shared by 'min.patients' in the binary DEG matrix. In this process, each patient is used as seed and its DEGs are gradually excluded to find if there is a DEG list which is observed in 'min.patients' when the similarity is greater is 'overlap'.
 #'

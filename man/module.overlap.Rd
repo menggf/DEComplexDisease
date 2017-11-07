@@ -32,7 +32,7 @@ Plot the overlap among predicted DEG modules
 The DEG modules may have partial overlaps for either genes or patients. This function plots the overlaps for genes and patients from DEG modules in two heatmaps. It can be used to find DEG patterns.
 }
 \examples{
-data(decd)
+data(seed.mod)
 module.overlap(seed.mod, max.n=5,type='model')
 }
 \author{

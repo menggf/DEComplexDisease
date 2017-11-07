@@ -266,10 +266,10 @@ Plot.deg.specific <- function(input, ann = NULL, col.order = NULL, show.genes = 
 #' @return A heatmap plot
 #'
 #' @examples
-#' \dontrun{
+#' 
 #' Plot(deg,ann.er, max.n=5)
 #' Plot(deg.spc, ann.er, max.n=5)
-#' }
+#'
 #'
 #' @export
 #'

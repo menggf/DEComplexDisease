@@ -65,9 +65,9 @@ summarize <- function(...) {
 #' @return A data.frame.
 #'
 #' @examples
-#' \dontrun{
+#' 
 #' report.module <- summarize(cluster.mod)
-#' }
+#' 
 #' @export
 summarize.cluster.module <- function(res.module, max.n = 10, ...) {
     all.pas = colnames(res.module[["decd.input"]]$deg)
