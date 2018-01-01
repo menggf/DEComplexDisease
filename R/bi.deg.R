@@ -15,6 +15,7 @@
 #' @importFrom utils tail
 #' @importFrom methods is
 #' @importFrom DESeq2 DESeqDataSetFromMatrix estimateSizeFactors estimateDispersions dispersions varianceStabilizingTransformation
+#' @importFrom SummarizedExperiment assay
 #' @import parallel
 #'
 #' @details For each sample in 'exp', 'cl' defines the patients and normal. The normal samples are used to construct the expression references with negative binomial distribution (e.g. method='edger' or method='deseq2') or a normal distribution (method='normalized').
@@ -82,8 +83,8 @@ bi.deg <- function(exp, cl, method = c("edger", "deseq2", "normalized")[1], cuto
         mycutoff[disp > quantile(disp, probs = 0.97)] = cutoff + 0.05
         rm(y)
         deg.lst = bplapply(wh.pa, function(x) {
-            y = DESeqDataSetFromMatrix(countData = exp[, c(wh.ct, x)], colData = data.frame(lab = c(rep("control",
-                length(wh.ct)), "disease")), design = ~1)
+            y = DESeqDataSetFromMatrix(countData = exp[, c(wh.ct, x)], colData = data.frame(lab = 
+            c(rep("control", length(wh.ct)), "disease")), design = ~1)
             y <- estimateSizeFactors(y)
             y <- estimateDispersions(y, quiet = TRUE)
             z2 = 2^assay(varianceStabilizingTransformation(y))

@@ -42,6 +42,28 @@ NULL
 #' @return A list
 NULL
 
+#' clustered module 1
+#'
+#' The module analysis results
+#'
+#' @docType data
+#' @keywords datasets
+#' @name res.mod1
+#' @format a list
+#' @return A list
+NULL
+
+#' clustered module 1
+#'
+#' The module analysis results
+#'
+#' @docType data
+#' @keywords datasets
+#' @name res.mod2
+#' @format a list
+#' @return A list
+NULL
+
 #' The patient-specific DEGs (part)
 #'
 #' The patient-specific DEGs (only part)

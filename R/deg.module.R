@@ -227,6 +227,7 @@ seed.module <- function(deg, res.deg = NULL, test.patients = NULL, min.genes = 1
 #' @examples
 #' cluster.mod <- cluster.module(seed.mod, model.method='slope.clustering')
 #' cluster.mod2 <- cluster.module(seed.mod, model.method='slope.clustering', vote.seed=TRUE)
+#'
 #' @export
 
 cluster.module <- function(res.module, vote.seed = FALSE, model.method = NULL, cores = 1,

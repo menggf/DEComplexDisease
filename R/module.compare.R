@@ -26,42 +26,40 @@
 #' @return The heatmap plot for gene overlaps.
 #'
 #' @examples
-#' \dontrun{
-#' module.compare(res.mod1,res.mod2, type='model', max.n=20)
-#' }
+#' module.compare(res.mod1,res.mod2, type='model', max.n1=5)
 #' @export
 
-module.compare <- function(res.module1, res.module2, used.mods1 = NULL, used.mods2 = NULL, 
-    type = c("model", "max.patients", "max.genes")[1], max.n1 = 30, max.n2 = max.n1, 
+module.compare <- function(res.module1, res.module2, used.mods1 = NULL, used.mods2 = NULL,
+    type = c("model", "max.patients", "max.genes")[1], max.n1 = 30, max.n2 = max.n1,
     show.overlap = TRUE, cex = 10) {
-    if (!is(res.module1, "seed.module") & !is(res.module1, "cluster.module")) 
+    if (!is(res.module1, "seed.module") & !is(res.module1, "cluster.module"))
         stop("Error: reg.module1: must the output of 'seed.module' or 'cluster.module'!")
-    if (!is(res.module2, "seed.module") & !is(res.module2, "cluster.module")) 
+    if (!is(res.module2, "seed.module") & !is(res.module2, "cluster.module"))
         stop("Error: reg.module2: must the output of 'seed.module' or 'cluster.module'!")
-    if (!any(c("model", "max.patients", "max.genes") == type)) 
+    if (!any(c("model", "max.patients", "max.genes") == type))
         stop("Error: type: should one of model, max.patients and max.genes!")
-    if (is.null(res.module1[[1]][[type]])) 
+    if (is.null(res.module1[[1]][[type]]))
         stop("Error: res.module1 has no selected type")
-    if (is.null(res.module2[[1]][[type]])) 
+    if (is.null(res.module2[[1]][[type]]))
         stop("Error: res.module2 has no selected type")
     all.mod1 = names(res.module1)
-    all.mod1 = all.mod1[all.mod1 != "decd.specific" & all.mod1 != "decd.input" & 
+    all.mod1 = all.mod1[all.mod1 != "decd.specific" & all.mod1 != "decd.input" &
         all.mod1 != "decd.clustering"]
     all.mod2 = names(res.module2)
-    all.mod2 = all.mod2[all.mod2 != "decd.specific" & all.mod2 != "decd.input" & 
+    all.mod2 = all.mod2[all.mod2 != "decd.specific" & all.mod2 != "decd.input" &
         all.mod2 != "decd.clustering"]
     if (is.null(used.mods1)) {
         mod1 = .select.mod(res.module1, max.n1, type = type)
     } else {
         mod1 = used.mods1[used.mods1 %in% all.mod1]
-        if (length(mod1) == 0) 
+        if (length(mod1) == 0)
             stop("Error: used.mods1: no ID is recognized!")
     }
     if (is.null(used.mods2)) {
         mod2 = .select.mod(res.module2, max.n2, type = type)
     } else {
         mod2 = used.mods2[used.mods2 %in% all.mod2]
-        if (length(mod2) == 0) 
+        if (length(mod2) == 0)
             stop("Error: used.mods2: no ID is recognized!")
     }
     n1 = length(mod1)
@@ -85,12 +83,12 @@ module.compare <- function(res.module1, res.module2, used.mods1 = NULL, used.mod
     row.names(olp4) <- lab1
     colnames(olp4) <- lab2
     if (show.overlap) {
-        Heatmap(olp4, cluster_rows = FALSE, cluster_columns = FALSE, name = "Genes", 
+        Heatmap(olp4, cluster_rows = FALSE, cluster_columns = FALSE, name = "Genes",
             column_title = "genes", cell_fun = function(j, i, x, y, w, h, col) {
                 grid.text(olp2[i, j], x, y, gp = gpar(fontsize = cex))
             })
     } else {
-        Heatmap(olp4, cluster_rows = FALSE, cluster_columns = FALSE, name = "Genes", 
+        Heatmap(olp4, cluster_rows = FALSE, cluster_columns = FALSE, name = "Genes",
             column_title = "genes")
     }
 }

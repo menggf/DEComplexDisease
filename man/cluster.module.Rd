@@ -54,6 +54,7 @@ This functon perform a k-mean based clustering to cluster the predicted modules.
 \examples{
 cluster.mod <- cluster.module(seed.mod, model.method='slope.clustering')
 cluster.mod2 <- cluster.module(seed.mod, model.method='slope.clustering', vote.seed=TRUE)
+
 }
 \author{
 Guofeng Meng

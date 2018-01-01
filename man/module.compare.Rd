@@ -38,9 +38,7 @@ Plot the overlap among predicted DEG modules
 This function is to compare the modules from different studies, e.g. the different diseases or the different data for the same disease.
 }
 \examples{
-\dontrun{
-module.compare(res.mod1,res.mod2, type='model', max.n=20)
-}
+module.compare(res.mod1,res.mod2, type='model', max.n1=5)
 }
 \author{
 Guofeng Meng
