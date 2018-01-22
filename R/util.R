@@ -84,7 +84,7 @@
     z = x/length(pas)
     res = vector()
     while (1) {
-        res = sapply(z, .bi.transform, min.init.coverage)
+        res = vapply(z, .bi.transform,1, min.init.coverage )
         if (length(res[res != 0]) < 10000) 
             break
         min.init.coverage = min.init.coverage + 0.05
@@ -108,10 +108,10 @@
     mods = mods[mods != "M0"]
     all.patients = unique(unlist(sapply(mods, function(x) res.module[[x]][[type]][["patients"]])))
     rt = vector()
-    len.mod0 = sapply(mods, function(x) length(all.patients[all.patients %in% res.module[[x]][[type]][["patients"]]]))
+    len.mod0 = vapply(mods, function(x) length(all.patients[all.patients %in% res.module[[x]][[type]][["patients"]]]), 10)
     for (i in seq_len(k)) {
-        len.mod = sapply(mods, function(x) length(all.patients[all.patients %in% 
-            res.module[[x]][[type]][["patients"]]]))
+        len.mod = vapply(mods, function(x) length(all.patients[all.patients %in% 
+            res.module[[x]][[type]][["patients"]]]), 10)
         used.mod = mods[which.max(len.mod)]
         if (length(used.mod) > 1) 
             used.mod = used.mod[which.max(len.mod[used.mod])][1]

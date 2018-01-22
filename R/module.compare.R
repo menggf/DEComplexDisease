@@ -66,8 +66,8 @@ module.compare <- function(res.module1, res.module2, used.mods1 = NULL, used.mod
     n2 = length(mod2)
     olp2 = matrix(ncol = n2, nrow = n1)
     olp4 = matrix(ncol = n2, nrow = n1)
-    len3 = sapply(seq_len(n1), function(x) length(res.module1[[mod1[x]]][[type]][["genes"]]))
-    len4 = sapply(seq_len(n2), function(x) length(res.module2[[mod2[x]]][[type]][["genes"]]))
+    len3 = vapply(seq_len(n1), function(x) length(res.module1[[mod1[x]]][[type]][["genes"]]), 10)
+    len4 = vapply(seq_len(n2), function(x) length(res.module2[[mod2[x]]][[type]][["genes"]]), 10)
     for (i in seq_len(n1)) {
         ges1 = res.module1[[mod1[i]]][[type]][["genes"]]
         for (j in seq_len(n2)) {

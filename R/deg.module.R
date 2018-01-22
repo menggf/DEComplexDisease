@@ -164,8 +164,8 @@ seed.module <- function(deg, res.deg = NULL, test.patients = NULL, min.genes = 1
         return(out)
     }, BPPARAM= MulticoreParam( workers= min(cores, length(used.pas))))
     names(res) <- used.pas
-    tag = sapply(used.pas, function(x) if (is.null(res[[x]][["max.genes"]]))
-        TRUE else FALSE)
+    tag = vapply(used.pas, function(x) if (is.null(res[[x]][["max.genes"]]))
+        TRUE else FALSE, TRUE)
     for (x in used.pas[tag]) res[[x]] = NULL
     res[["M0"]] <- res0
     res[["decd.input"]] = input
@@ -259,12 +259,12 @@ cluster.module <- function(res.module, vote.seed = FALSE, model.method = NULL, c
     res.pas = lapply(final.pas, function(x) res[[x]][["model"]][["patients"]])
     names(res.pas) <- final.pas
     sim.pas = unlist(bplapply(final.pas, function(xx) {
-        sapply(final.pas, function(yy) {
+        vapply(final.pas, function(yy) {
             if (xx == yy) {
                 return(1)
             }
             return(length(which(res.pas[[xx]] %in% res.pas[[yy]]))/length(res.pas[[xx]]))
-        })
+        }, 0.1)
     }, BPPARAM= MulticoreParam( workers= min(cores, length(final.pas)))))
 
     mm.pas = matrix(sim.pas, ncol = length(final.pas))

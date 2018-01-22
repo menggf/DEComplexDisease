@@ -87,7 +87,7 @@ Plot.seed.module <- function(res.module, ann = NULL, deg = NULL, col.order = NUL
         }
     
     
-    mat.shared = t(sapply(show.mods, function(x) {
+    mat.shared = t(vapply(show.mods, function(x) {
         seed = res.module[[x]][["seed"]]
         if (x == "M0") {
             # used.ges=res.module[[x]][['max.patients']][['genes']] #module genes
@@ -111,8 +111,8 @@ Plot.seed.module <- function(res.module, ann = NULL, deg = NULL, col.order = NUL
             rr[sims < dissimilarity] = mylabs[2]
         
         return(rr)
-    }))
-    len = sapply(show.mods, function(x) {
+    }, rep("", length(pas))))
+    len = vapply(show.mods, function(x) {
         if (is.null(res.module[[x]][[type]])) 
             return(0)
         if (x == "M0") {
@@ -121,7 +121,7 @@ Plot.seed.module <- function(res.module, ann = NULL, deg = NULL, col.order = NUL
         } else {
             return(length(res.module[[x]][[type]][["genes"]]))
         }
-    })
+    }, 1)
     ha = NULL
     if (!is.null(ann)) {
         has.pas = row.names(ann)
@@ -294,7 +294,7 @@ Plot.cluster.module <- function(res.module, ann = NULL, deg = NULL, col.order = 
         }
     
     
-    mat.shared = t(sapply(show.mods, function(x) {
+    mat.shared = t(vapply(show.mods, function(x) {
         seed = res.module[[x]][["seed"]]
         if (x == "M0") {
             # used.ges=res.module[[x]][['max.patients']][['genes']] #module genes
@@ -320,8 +320,8 @@ Plot.cluster.module <- function(res.module, ann = NULL, deg = NULL, col.order = 
             rr[sims < dissimilarity] = mylabs[2]
         
         return(rr)
-    }))
-    len = sapply(show.mods, function(x) {
+    },rep("", length(pas))))
+    len = vapply(show.mods, function(x) {
         if (is.null(res.module[[x]][[type]])) 
             return(0)
         if (x == "M0") {
@@ -330,7 +330,7 @@ Plot.cluster.module <- function(res.module, ann = NULL, deg = NULL, col.order = 
         } else {
             return(length(res.module[[x]][[type]][["genes"]]))
         }
-    })
+    }, 1)
     ha = NULL
     
     if (!is.null(ann)) {

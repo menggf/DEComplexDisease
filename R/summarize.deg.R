@@ -24,21 +24,21 @@ summarize.deg.specific <- function(res.deg, max.n = 10, ...) {
     
     pas = names(res.deg)
     pas = pas[pas != "decd.input" & pas != "decd.test"]
-    deg.gen.len = sapply(pas, function(x) length(res.deg[[x]]$genes))
-    deg.pa.len = sapply(pas, function(x) length(res.deg[[x]]$patients))
+    deg.gen.len = vapply(pas, function(x) length(res.deg[[x]]$genes), 10)
+    deg.pa.len = vapply(pas, function(x) length(res.deg[[x]]$patients), 10)
     
     pas = names(sort(deg.gen.len, decreasing = TRUE))
-    dd1 = sapply(pas, function(x) {
+    dd1 = vapply(pas, function(x) {
         y = (res.deg[["decd.input"]]$deg)[res.deg[[x]]$genes, x]
         length(y[y == 1])
-    })
+    }, 1)
     
-    dd2 = sapply(pas, function(x) {
+    dd2 = vapply(pas, function(x) {
         y = (res.deg[["decd.input"]]$deg)[res.deg[[x]]$genes, x]
         length(y[y == -1])
-    })
-    sim = sapply(pas, function(x) res.deg[[x]]$sc)
-    cutoff = sapply(pas, function(x) res.deg[[x]]$cutoff)
+    },1)
+    sim = vapply(pas, function(x) res.deg[[x]]$sc, 0.1)
+    cutoff = vapply(pas, function(x) res.deg[[x]]$cutoff, 0.1)
     output = data.frame(sample.id = pas, up.regulation.raw = cc1[pas], down.regulation.raw = cc2[pas], 
         neighbor.patients = deg.pa.len[pas], up.regulation.valdiated = dd1[pas], 
         down.regulation.validated = dd2[pas], similarity = sim, cutoff = cutoff)

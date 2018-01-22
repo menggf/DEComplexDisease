@@ -71,11 +71,11 @@ module.screen <- function(res.module, feature.patients = NULL, feature.genes = N
             } else {
                 if (length(c.total) == 0)
                   return(1)
-                p = sapply(seq_along(c.feature), function(i) {
+                p = vapply(seq_along(c.feature), function(i) {
                   m = matrix(c(c.feature[i], c.total[i] - c.feature[i], xx, n.add.patients -
                     xx), ncol = 2, byrow = TRUE)
                   return(fisher.test(m, alternative = "greater")$p.value)
-                })
+                }, 0.01)
                 return(min(p))
             }
         }, BPPARAM= MulticoreParam( workers= min(cores, length(used.mods)))))
@@ -111,8 +111,8 @@ module.screen <- function(res.module, feature.patients = NULL, feature.genes = N
         }
     }
     if (!is.null(feature.genes)) {
-        ge.overlap = sapply(used.mods, function(x) length(feature.genes[feature.genes %in%
-            res.module[[x]][["max.genes"]][["genes"]]])/length(res.module[[x]][["max.genes"]][["genes"]]))
+        ge.overlap = vapply(used.mods, function(x) length(feature.genes[feature.genes %in%
+            res.module[[x]][["max.genes"]][["genes"]]])/length(res.module[[x]][["max.genes"]][["genes"]]),0.1)
         names(ge.overlap) <- used.mods
         ge.overlap = ge.overlap[ge.overlap > 0]
         sort.mods = names(sort(ge.overlap, decreasing = TRUE))

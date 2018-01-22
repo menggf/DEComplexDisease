@@ -87,7 +87,7 @@ module.modeling <- function(res.module, keep.gene.num = NULL, model.method = c("
                   cf[is.na(cf)] = 0
                   cf1 = .cof(cf)
                   dt = .fv(y, cf1)
-                  z = sapply(seq_len(n), function(m) sd(dt[1:m]))
+                  z = vapply(seq_len(n), function(m) sd(dt[1:m]), 0.1)
                   wh = which.max(z)
                   keep = x[wh]
                 }

@@ -48,13 +48,13 @@ Plot.deg <- function(input, ann = NULL, col.order = NULL, show.genes = NULL, max
     }
     if (length(show.genes) == 0)
         stop("Error: show.genes: cannot recognize the ids")
-    mat.deg = t(sapply(show.genes, function(x) {
+    mat.deg = t(vapply(show.genes, function(x) {
         y = input[x, ]
         rr = rep("", length(y))
         rr[y == 1] = "Up"
         rr[y == -1] = "Down"
         return(rr)
-    }))
+    }, rep("Up", ncol(input))))
 
 
     row.names(mat.deg) <- show.genes
@@ -177,13 +177,13 @@ Plot.deg.specific <- function(input, ann = NULL, col.order = NULL, show.genes = 
         if (length(show.genes) == 0)
             stop("Error: show.genes: cannot recognize the ids")
     }
-    mat.deg = t(sapply(show.genes, function(x) {
+    mat.deg = t(vapply(show.genes, function(x) {
         y = dmx2[x, ]
         rr = rep("", length(y))
         rr[y == 1] = "Up"
         rr[y == -1] = "Down"
         return(rr)
-    }))
+    }, rep("Up", ncol(dmx2)) ))
     row.names(mat.deg) <- show.genes
     colnames(mat.deg) <- pas
     ha = NULL
@@ -302,13 +302,13 @@ Plot.deg.specific.test <- function(input, ann = NULL, col.order = NULL, show.gen
         if (length(show.genes) == 0)
             stop("Error: show.genes: cannot recognize the gene IDs")
     }
-    mat.deg = t(sapply(show.genes, function(x) {
+    mat.deg = t(vapply(show.genes, function(x) {
         y = dmx2[x, ]
         rr = rep("", length(y))
         rr[y == 1] = "Up"
         rr[y == -1] = "Down"
         return(rr)
-    }))
+    }, rep("Up", ncol(dmx2)) ))
     row.names(mat.deg) <- show.genes
     colnames(mat.deg) <- pas
     ha = NULL

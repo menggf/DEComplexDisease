@@ -56,9 +56,9 @@ deg.specific <- function(deg, test.patients = NULL, min.genes = 50, min.patients
     }, BPPARAM= MulticoreParam( workers= min(cores, length(used.pas))))
 
     names(res) <- used.pas
-    tag = sapply(used.pas, function(x) if (length(res[[x]][["genes"]]) < min.genes |
+    tag = vapply(used.pas, function(x) if (length(res[[x]][["genes"]]) < min.genes |
         length(res[[x]][["patients"]]) < min.patients | res[[x]][["sc"]] < overlap)
-        TRUE else FALSE)
+        TRUE else FALSE, TRUE)
     for (pa in used.pas[tag]) res[[pa]] = NULL
     res[["decd.input"]] = list(genes = ges, patients = used.pas, overlap = overlap,
         deg = deg, min.genes = min.genes, min.patients = min.patients, overlap = overlap)
