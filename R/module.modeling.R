@@ -87,7 +87,7 @@ module.modeling <- function(res.module, keep.gene.num = NULL, model.method = c("
                   cf[is.na(cf)] = 0
                   cf1 = .cof(cf)
                   dt = .fv(y, cf1)
-                  z = vapply(seq_len(n), function(m) sd(dt[1:m]), 0.1)
+                  z = vapply(seq_len(n), function(m) sd(dt[seq_len(m)]), 0.1)
                   wh = which.max(z)
                   keep = x[wh]
                 }
@@ -99,7 +99,7 @@ module.modeling <- function(res.module, keep.gene.num = NULL, model.method = c("
                   cf[is.na(cf)] = 0
                   cf1 = .cof(cf)
                   dt = .fv(y, cf1)
-                  wh = which.max(dt[1:(length(dt) - 20)])
+                  wh = which.max(dt[seq_len(length(dt) - 20)])
                   keep = x[wh]
                 }
                 if (model.method == "min.similarity") {
@@ -113,7 +113,7 @@ module.modeling <- function(res.module, keep.gene.num = NULL, model.method = c("
         seed = res.module[[mod]][["seed"]]
         n = length(seed[seed != 0])
         remove = res.module[[mod]][["genes.removed"]]
-        seed[remove[1:(n - keep)]] = 0
+        seed[remove[seq_len(n - keep)]] = 0
         used.genes = names(seed[seed != 0])
         sub.deg = deg[used.genes, ]
         new.seed = seed[used.genes]

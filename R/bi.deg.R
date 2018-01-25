@@ -63,7 +63,7 @@ bi.deg <- function(exp, cl, method = c("edger", "deseq2", "normalized")[1], cuto
         deg.lst = bplapply(wh.pa, function(x) {
             z = DGEList(counts = exp[, c(wh.ct, x)])
             z2 = equalizeLibSizes(z, dispersion = disp)$pseudo.counts
-            p = pnbinom(z2[, n.ct + 1], size = 1/disp, mu = rowSums(z2[, 1:n.ct])/n.ct,
+            p = pnbinom(z2[, n.ct + 1], size = 1/disp, mu = rowSums(z2[, seq_len(n.ct)])/n.ct,
                 lower.tail = FALSE)
             bi = integer(length(p))
             bi[p <= mycutoff] = 1
@@ -88,7 +88,7 @@ bi.deg <- function(exp, cl, method = c("edger", "deseq2", "normalized")[1], cuto
             y <- estimateSizeFactors(y)
             y <- estimateDispersions(y, quiet = TRUE)
             z2 = 2^assay(varianceStabilizingTransformation(y))
-            p = pnbinom(z2[, n.ct + 1], size = 1/disp, mu = rowSums(z2[, 1:n.ct])/n.ct,
+            p = pnbinom(z2[, n.ct + 1], size = 1/disp, mu = rowSums(z2[, seq_len(n.ct)])/n.ct,
                 lower.tail = FALSE)
             bi = integer(length(p))
             bi[p <= mycutoff] = 1

@@ -307,7 +307,7 @@ cluster.module <- function(res.module, vote.seed = FALSE, model.method = NULL, c
                 wh.pa = cl.pas
             }
             outcome[[paste("M", cl, sep = "")]] = res[[wh.pa[1]]]
-            used = wh.pa[1:min(max.show.n, length(wh.pa))]
+            used = wh.pa[seq_len(min(max.show.n, length(wh.pa)))]
             represent[[paste("M", cl, sep = "")]] = wh.pa[1]
             if (length(used) > 1) {
                 for (i in 2:length(wh.pa)) {

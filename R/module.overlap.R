@@ -47,10 +47,10 @@ module.overlap <- function(res.module, show.mods = NULL, type = c("model", "max.
     olp2 = matrix(ncol = n, nrow = n)
     olp3 = matrix(ncol = n, nrow = n)
     olp4 = matrix(ncol = n, nrow = n)
-    for (i in 1:n) {
+    for (i in seq_len(n)) {
         pas1 = res.module[[show.mods[i]]][[type]][["patients"]]
         ges1 = res.module[[show.mods[i]]][[type]][["genes"]]
-        for (j in i:n) {
+        for (j in seq_len(n)) {
             pas2 = res.module[[show.mods[j]]][[type]][["patients"]]
             ges2 = res.module[[show.mods[j]]][[type]][["genes"]]
             
@@ -59,8 +59,8 @@ module.overlap <- function(res.module, show.mods = NULL, type = c("model", "max.
             
         }
     }
-    for (i in 1:n) {
-        for (j in 1:n) {
+    for (i in seq_len(n)) {
+        for (j in seq_len(n)) {
             olp3[i, j] = olp1[i, j]/olp1[j, j]
             olp4[i, j] = olp2[i, j]/olp2[j, j]
         }

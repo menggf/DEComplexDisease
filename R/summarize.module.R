@@ -39,7 +39,7 @@ summarize.seed.module <- function(res.module, max.n = 10, ...) {
     # 'patients(max.genes)', 'sc(max.genes)', 'genes(model)','patients(model)',
     # 'sc(model)', 'genes(max.patients)', 'patients(max.patients)',
     # 'sc(max.patients)', 'overlap')
-    return(output[1:min(max.n, dim(output)[1])])
+    return(output[seq_len(min(max.n, dim(output)[1])), ])
 }
 
 
@@ -94,6 +94,6 @@ summarize.cluster.module <- function(res.module, max.n = 10, ...) {
     # 'patients(max.genes)', 'sc(max.genes)', 'genes(model)','patients(model)',
     # 'sc(model)', 'genes(max.patients)', 'patients(max.patients)',
     # 'sc(max.patients)', 'overlap')
-    return(output[1:min(max.n, dim(output)[1]), ])
+    return(output[seq_len(min(max.n, dim(output)[1])), ])
 }
 

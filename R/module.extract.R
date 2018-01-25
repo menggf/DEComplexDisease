@@ -56,8 +56,8 @@ module.extract <- function(res.module, mod, n.patients = NULL, n.genes = NULL) {
     seed.genes = names(seed[seed != 0])
     add.patients = res.module[[mod]][["patients.added"]]
     remove.genes = res.module[[mod]][["genes.removed"]]
-    have.patients = add.patients[1:n.patients]
-    have.genes = seed.genes[!seed.genes %in% remove.genes[1:(length(seed.genes) - 
+    have.patients = add.patients[seq_len(n.patients)]
+    have.genes = seed.genes[!seed.genes %in% remove.genes[seq_len(length(seed.genes) - 
         n.genes)]]
     return(list(genes = have.genes, patients = have.patients))
 }

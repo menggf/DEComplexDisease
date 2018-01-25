@@ -44,6 +44,6 @@ summarize.deg.specific <- function(res.deg, max.n = 10, ...) {
         down.regulation.validated = dd2[pas], similarity = sim, cutoff = cutoff)
     output = output[order(output$up.regulation.valdiated + output$down.regulation.validated, 
         decreasing = TRUE), ]
-    return(output[1:min(max.n, length(pas)), ])
+    return(output[seq_len(min(max.n, length(pas))), ])
 }
 

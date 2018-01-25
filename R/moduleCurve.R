@@ -55,10 +55,10 @@ module.curve <- function(res.module, mod = names(res.module)[1]) {
         cf[is.na(cf)] = 0
         cf1 = .cof(cf)
         dt = .fv(pas, cf1)
-        z = vapply(seq_len(n), function(m) sd(dt[1:m]), 0.1)
+        z = vapply(seq_len(n), function(m) sd(dt[seq_len(m)]), 0.1)
         wh1 = which.max(z)
         wh2 = which.max(ges * pas)
-        wh3 = which.max(dt[1:(length(dt) - 20)])
+        wh3 = which.max(dt[seq_len(length(dt) - 20)])
         wh4 = which(sim == sim[tag][which.min(sim[tag])])
     }
     

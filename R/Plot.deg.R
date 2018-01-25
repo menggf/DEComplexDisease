@@ -39,7 +39,7 @@ Plot.deg <- function(input, ann = NULL, col.order = NULL, show.genes = NULL, max
         stop("Error: deg: valid values are  1, -1 and 0")
     if (is.null(show.genes)) {
         aa = sort(apply(input, 1, function(x) length(x[x != 0])), decreasing = TRUE)
-        show.genes = names(aa[1:min(max.n, dim(input)[1])])
+        show.genes = names(aa[seq_len(min(max.n, dim(input)[1]))])
         if (aa[length(show.genes)] == 0)
             show.genes = names(aa[aa != 0])
     } else {
@@ -169,7 +169,7 @@ Plot.deg.specific <- function(input, ann = NULL, col.order = NULL, show.genes = 
 
     if (is.null(show.genes)) {
         aa = sort(apply(dmx2, 1, function(x) length(x[x != 0])), decreasing = TRUE)
-        show.genes = names(aa[1:min(max.n, dim(dmx2)[1])])
+        show.genes = names(aa[seq_len(min(max.n, dim(dmx2)[1]))])
         if (aa[length(show.genes)] == 0)
             show.genes = names(aa[aa != 0])
     } else {
@@ -294,7 +294,7 @@ Plot.deg.specific.test <- function(input, ann = NULL, col.order = NULL, show.gen
 
     if (is.null(show.genes)) {
         aa = sort(apply(dmx2, 1, function(x) length(x[x != 0])), decreasing = TRUE)
-        show.genes = names(aa[1:min(max.n, dim(dmx2)[1])])
+        show.genes = names(aa[seq_len(min(max.n, dim(dmx2)[1]))])
         if (aa[length(show.genes)] == 0)
             show.genes = names(aa[aa != 0])
     } else {

@@ -56,7 +56,7 @@ module.screen <- function(res.module, feature.patients = NULL, feature.genes = N
             c.total = vector()
             rcd = 0
             for (i in tail(seq_along(add.patients), -9)) {
-                have.patients = add.patients[1:i]
+                have.patients = add.patients[seq_len(i)]
                 xx = length(intersect(feature.patients, have.patients))
                 if (xx < 2 | rcd == xx)
                   (next)()
@@ -87,12 +87,12 @@ module.screen <- function(res.module, feature.patients = NULL, feature.genes = N
         }
         show.n = min(show.n, length(sort.mods))
         par(mfrow = .trans.sq(show.n), mar = c(5, 4, 1, 2) + 0.1)
-        for (mod in sort.mods[1:show.n]) {
+        for (mod in sort.mods[seq_len(show.n)]) {
             add.patients = res.module[[mod]][["patients.added"]]
             c.feature = vector()
             c.total = vector()
             for (i in 10:length(add.patients)) {
-                have.patients = add.patients[1:i]
+                have.patients = add.patients[seq_len(i)]
                 c.feature = append(c.feature, length(intersect(feature.patients,
                   have.patients)))
                 c.total = append(c.total, length(have.patients))
@@ -125,7 +125,7 @@ module.screen <- function(res.module, feature.patients = NULL, feature.genes = N
             c.feature = vector()
             c.total = vector()
             for (i in seq_len(remove)) {
-                have.genes = seed.genes[!seed.genes %in% remove[1:i]]
+                have.genes = seed.genes[!seed.genes %in% remove[seq_len(i)]]
                 c.feature = append(c.feature, length(intersect(feature.genes, have.genes)))
                 c.total = append(c.total, length(have.genes))
             }
