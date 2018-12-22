@@ -58,7 +58,7 @@ bi.deg <- function(exp, cl, method = c("edger", "deseq2", "normalized")[1], cuto
         y <- estimateDisp(y)
         disp = as.vector(getDispersion(y))
         mycutoff = rep(cutoff, length(disp))
-        mycutoff[disp > quantile(disp, probs = 0.97)] = cutoff + 0.05
+        #mycutoff[disp > quantile(disp, probs = 0.97)] = cutoff + 0.05
         rm(y)
         deg.lst = bplapply(wh.pa, function(x) {
             z = DGEList(counts = exp[, c(wh.ct, x)])
@@ -108,8 +108,8 @@ bi.deg <- function(exp, cl, method = c("edger", "deseq2", "normalized")[1], cuto
             z = (w - mu)/sd
             p = pnorm(z, lower.tail = FALSE)
             bi = integer(length(p))
-            bi[p <= mycutoff] = 1
-            bi[1 - p <= mycutoff] = -1
+            bi[p <= cutoff] = 1
+            bi[1 - p <= cutoff] = -1
             return(bi)
         }, BPPARAM= MulticoreParam( workers= min(cores, length(wh.pa))))
         names(deg.lst) <- pas
