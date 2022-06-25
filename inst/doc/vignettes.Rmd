@@ -28,9 +28,11 @@ Applying the DEComplexDisease analysis results, users are possible to find the p
 
 
 ## Package installation
-```
-source("https://bioconductor.org/biocLite.R")
-biocLite("DEComplexDisease")
+```{r}
+    if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+    BiocManager::install("DEComplexDisease")
 ```
 ## Clear the session
 DEComplexDisease needs huge computing powers to do the whole analysis for the reasons that (1) it is designed for big data, which usually have hundreds of patients; (2) it implements a bi-clustering algorithm in many steps. Therefore, it is highly recommended to use multi-core parallel computing.
